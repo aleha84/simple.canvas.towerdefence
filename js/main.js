@@ -7,10 +7,6 @@ SCG.images = {
 }
 
 $(document).ready(function(){
-	
-
-
-
 	if(!SCG.canvas)
 	{
 		var c = $('<canvas />',{
@@ -43,6 +39,8 @@ $(document).ready(function(){
 		});
 
 		SCG.go.push(testGo);
+
+		SCG.gameControls.orientationChangeEventInit();
 
 		SCG.animate();
 	});

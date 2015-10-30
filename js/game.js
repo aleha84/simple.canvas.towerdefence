@@ -2,11 +2,11 @@ var SCG = {};
 
 SCG.battlefield = {
 	default: {
-		width: 1024,
-		height: 768
+		width: 640,
+		height: 480
 	},
-	width: 1024,
-	height: 768,
+	width: 640,
+	height: 480,
 };
 
 SCG.canvas = undefined;
@@ -17,6 +17,8 @@ SCG.gameLogics = {
 	gameOver: false,
 	drawBoundings: true,
 	fillBoundings: false,
+	wrongDeviceOrientation: false,
+	isMobile: false
 }
 
 SCG.go = [];
@@ -24,6 +26,10 @@ SCG.nonplayableGo = [];
 SCG.visibleGo = [];
 
 SCG.gameControls = {
+	scale:
+	{
+		times: 1
+	},
 	mousestate : {
 		position: new Vector2,
 		delta: new Vector2,
@@ -91,6 +97,50 @@ SCG.gameControls = {
 		};
 		SCG.gameControls.selectedGOs = [];
 	},
+	orientationChangeEventInit: function() {
+		var that = this;
+		$(window).on('orientationchange resize', function(e){
+			that.graphInit();
+		});
+
+		SCG.gameLogics.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+		this.graphInit();
+	},
+	graphInit: function(){
+		SCG.gameLogics.wrongDeviceOrientation = !window.matchMedia("(orientation: landscape)").matches;
+		if(SCG.gameLogics.wrongDeviceOrientation) {
+			return;
+		}
+
+		var width = SCG.gameLogics.isMobile ? window.innerHeight : window.innerWidth;
+		if(width < SCG.battlefield.default.width)
+		{
+			SCG.gameLogics.wrongDeviceOrientation = true;
+			return;
+		}
+		// var proportions = SCG.gameLogics.isMobile ?  (window.innerHeight / window.innerWidth) : (window.innerWidth / window.innerHeight);
+		// SCG.gameControls.scale.times = (width / SCG.battlefield.default.width) / proportions;
+
+		var _width = $(window).width();
+		var _height = $(window).height();
+
+		SCG.gameControls.scale.times = _width > _height ? _height / SCG.battlefield.default.height : _width /SCG.battlefield.default.width;
+
+		if(SCG.gameControls.scale.times < 1)
+		{
+			SCG.gameLogics.wrongDeviceOrientation = true;
+			return;
+		}
+
+		SCG.battlefield.width = SCG.battlefield.default.width * SCG.gameControls.scale.times;
+		SCG.battlefield.height = SCG.battlefield.default.height * SCG.gameControls.scale.times;
+
+		$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
+		$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
+		SCG.canvas.width = SCG.battlefield.width;
+		SCG.canvas.height = SCG.battlefield.height;
+	},
 	permanentEventInit : function (){
 		var that = this;
 		$(document).on('keydown',function(e){
@@ -98,6 +148,20 @@ SCG.gameControls = {
 		});
 		$(document).on('keyup',function(e){
 			that.permanentKeyUp(e);
+		});
+		$(SCG.canvas).on('mousedown',function(e){
+			that.mouseDown(e);
+		});
+		$(SCG.canvas).on('mouseup',function(e){
+			that.mouseUp(e);
+		});
+		$(SCG.canvas).on('mouseout',function(e){
+			that.mouseOut(e);
+		});
+
+		$(SCG.canvas).on('contextmenu',function(e){
+			e.preventDefault();
+			return false;
 		});
 	},
 	permanentKeyDown : function (event)
@@ -111,6 +175,20 @@ SCG.gameControls = {
 		this.keyboardstate.shiftPressed =event.shiftKey;
 		this.keyboardstate.ctrlPressed =event.ctrlKey;
 		this.keyboardstate.altPressed =event.altKey;
+		switch(event.which)
+		{
+			case 32:
+				if(event.shiftKey){ 
+					SCG.gameLogics.isPausedStep = true;
+				}
+				else{
+					SCG.gameLogics.isPaused = !SCG.gameLogics.isPaused;	
+				}
+				
+				break;
+			default:
+				break;
+		}
 	}
 };
 

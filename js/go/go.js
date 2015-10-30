@@ -42,7 +42,7 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
-		SCG.context.drawImage(this.img, this.position.x - this.radius, this.position.y - this.radius, this.radius, this.radius);
+		SCG.context.drawImage(this.img, this.position.x - this.radius, this.position.y - this.radius, this.radius * SCG.gameControls.scale.times, this.radius * SCG.gameControls.scale.times);
 
 		this.internalRender();
 	},
@@ -53,7 +53,7 @@ SCG.GO.GO.prototype = {
 
 	update: function(now){ 
 		
-		if(!this.alive){
+		if(!this.alive || SCG.gameLogics.isPaused || SCG.gameLogics.gameOver || SCG.gameLogics.wrongDeviceOrientation){
 			return false;
 		}
 
