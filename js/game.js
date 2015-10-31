@@ -2,11 +2,11 @@ var SCG = {};
 
 SCG.battlefield = {
 	default: {
-		width: 640,
-		height: 480
+		width: 666,
+		height: 400
 	},
-	width: 640,
-	height: 480,
+	width: 666,
+	height: 400,
 };
 
 SCG.canvas = undefined;
@@ -18,6 +18,7 @@ SCG.gameLogics = {
 	drawBoundings: true,
 	fillBoundings: false,
 	wrongDeviceOrientation: false,
+	messageToShow: '',
 	isMobile: false
 }
 
@@ -108,14 +109,17 @@ SCG.gameControls = {
 		this.graphInit();
 	},
 	graphInit: function(){
+		SCG.gameLogics.messageToShow = '';
 		SCG.gameLogics.wrongDeviceOrientation = !window.matchMedia("(orientation: landscape)").matches;
 		if(SCG.gameLogics.wrongDeviceOrientation) {
+			SCG.gameLogics.messageToShow = 'wrong device orientation - portrait';
 			return;
 		}
 
-		var width = SCG.gameLogics.isMobile ? window.innerHeight : window.innerWidth;
+		var width =  window.innerWidth;
 		if(width < SCG.battlefield.default.width)
 		{
+			SCG.gameLogics.messageToShow = String.format('width lesser than 640px (width: {0}, iH: {1}, iW: {2})',width, window.innerHeight, window.innerWidth);
 			SCG.gameLogics.wrongDeviceOrientation = true;
 			return;
 		}
@@ -129,6 +133,7 @@ SCG.gameControls = {
 
 		if(SCG.gameControls.scale.times < 1)
 		{
+			SCG.gameLogics.messageToShow = String.format('window is to small (width: {0}, height: {1})', _width, _height);
 			SCG.gameLogics.wrongDeviceOrientation = true;
 			return;
 		}
