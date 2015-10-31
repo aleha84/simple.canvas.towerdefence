@@ -133,7 +133,7 @@ SCG.gameControls = {
 
 		if(SCG.gameControls.scale.times < 1)
 		{
-			SCG.gameLogics.messageToShow = 'window is to small';
+			SCG.gameLogics.messageToShow = String.format('window is to small (width: {0}, height: {1})', _width, _height);
 			SCG.gameLogics.wrongDeviceOrientation = true;
 			return;
 		}
