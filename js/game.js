@@ -2,11 +2,11 @@ var SCG = {};
 
 SCG.battlefield = {
 	default: {
-		width: 640,
-		height: 480
+		width: 666,
+		height: 400
 	},
-	width: 640,
-	height: 480,
+	width: 666,
+	height: 400,
 };
 
 SCG.canvas = undefined;
