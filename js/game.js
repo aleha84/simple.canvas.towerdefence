@@ -119,7 +119,7 @@ SCG.gameControls = {
 		var width = SCG.gameLogics.isMobile ? window.innerHeight : window.innerWidth;
 		if(width < SCG.battlefield.default.width)
 		{
-			SCG.gameLogics.messageToShow = 'width lesser than 640px';
+			SCG.gameLogics.messageToShow = String.format('width lesser than 640px (width: {0}, iH: {1}, iW: {2})',width, window.innerHeight, window.innerWidth);
 			SCG.gameLogics.wrongDeviceOrientation = true;
 			return;
 		}
