@@ -116,7 +116,7 @@ SCG.gameControls = {
 			return;
 		}
 
-		var width = SCG.gameLogics.isMobile ? window.innerHeight : window.innerWidth;
+		var width =  window.innerWidth;
 		if(width < SCG.battlefield.default.width)
 		{
 			SCG.gameLogics.messageToShow = String.format('width lesser than 640px (width: {0}, iH: {1}, iW: {2})',width, window.innerHeight, window.innerWidth);
