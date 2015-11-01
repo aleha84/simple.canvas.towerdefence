@@ -17,6 +17,24 @@ $(document).ready(function(){
 		$(document.body).append(c);
 		SCG.canvas = c.get(0);
 		SCG.context = SCG.canvas.getContext('2d');
+
+		var fulsscreenToggleButton = $('<div />',
+			{
+				class: 'button',
+				css: {
+					left: '10px',
+					top:'60px',
+					width: '80px',
+					height: '80px',
+					position: 'absolute',
+					'background-color': 'white'
+				},
+				on: {
+					click: function(){ screenfull.toggle(document.documentElement); }
+				}
+			});
+
+		$(document.body).append(fulsscreenToggleButton);
 	}
 
 	SCG.nonplayableGo = [];
