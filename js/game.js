@@ -106,6 +106,8 @@ SCG.gameControls = {
 
 		SCG.gameLogics.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+		setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
+
 		this.graphInit();
 	},
 	graphInit: function(){
