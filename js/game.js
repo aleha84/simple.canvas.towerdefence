@@ -2,11 +2,11 @@ var SCG = {};
 
 SCG.battlefield = {
 	default: {
-		width: 666,
-		height: 400
+		width: 500,
+		height: 300
 	},
-	width: 666,
-	height: 400,
+	width: 500,
+	height: 300,
 };
 
 SCG.canvas = undefined;
@@ -121,7 +121,7 @@ SCG.gameControls = {
 		var width =  window.innerWidth;
 		if(width < SCG.battlefield.default.width)
 		{
-			SCG.gameLogics.messageToShow = String.format('width lesser than 640px (width: {0}, iH: {1}, iW: {2})',width, window.innerHeight, window.innerWidth);
+			SCG.gameLogics.messageToShow = String.format('width lesser than {3} (width: {0}, iH: {1}, iW: {2})',width, window.innerHeight, window.innerWidth, SCG.battlefield.default.width);
 			SCG.gameLogics.wrongDeviceOrientation = true;
 			return;
 		}
