@@ -126,25 +126,34 @@ SCG.gameControls = {
 		// var proportions = SCG.gameLogics.isMobile ?  (window.innerHeight / window.innerWidth) : (window.innerWidth / window.innerHeight);
 		// SCG.gameControls.scale.times = (width / SCG.battlefield.default.width) / proportions;
 
-		var _width = $(window).width();
-		var _height = $(window).height();
-
-		SCG.gameControls.scale.times = _width > _height ? _height / SCG.battlefield.default.height : _width /SCG.battlefield.default.width;
-
-		if(SCG.gameControls.scale.times < 1)
+		if(document.height < window.outerHeight)
 		{
-			SCG.gameLogics.messageToShow = String.format('window is to small (width: {0}, height: {1})', _width, _height);
-			SCG.gameLogics.wrongDeviceOrientation = true;
-			return;
+			document.body.style.height = (window.outerHeight + 50) + 'px';
 		}
 
-		SCG.battlefield.width = SCG.battlefield.default.width * SCG.gameControls.scale.times;
-		SCG.battlefield.height = SCG.battlefield.default.height * SCG.gameControls.scale.times;
+		setTimeout( function(){ 
+			window.scrollTo(0, 1); 
+			var _width = $(window).width();
+			var _height = $(window).height();
 
-		$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
-		$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
-		SCG.canvas.width = SCG.battlefield.width;
-		SCG.canvas.height = SCG.battlefield.height;
+			SCG.gameControls.scale.times = _width > _height ? _height / SCG.battlefield.default.height : _width /SCG.battlefield.default.width;
+
+			if(SCG.gameControls.scale.times < 1)
+			{
+				SCG.gameLogics.messageToShow = String.format('window is to small (width: {0}, height: {1})', _width, _height);
+				SCG.gameLogics.wrongDeviceOrientation = true;
+				return;
+			}
+
+			SCG.battlefield.width = SCG.battlefield.default.width * SCG.gameControls.scale.times;
+			SCG.battlefield.height = SCG.battlefield.default.height * SCG.gameControls.scale.times;
+
+			$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
+			$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
+			SCG.canvas.width = SCG.battlefield.width;
+			SCG.canvas.height = SCG.battlefield.height;
+
+		}, 50 );	
 	},
 	permanentEventInit : function (){
 		var that = this;
