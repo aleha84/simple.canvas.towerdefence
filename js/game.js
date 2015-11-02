@@ -106,7 +106,14 @@ SCG.gameControls = {
 
 		SCG.gameLogics.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-		setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
+		if(SCG.gameLogics.isMobile)
+		{
+			setTimeout( function(){ window.scrollTo(0, 1); }, 100 );
+			$(document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange', function(e){
+				that.graphInit();
+			});
+		}
+		
 
 		this.graphInit();
 	},
