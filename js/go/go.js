@@ -23,6 +23,9 @@ SCG.GO.GO = function(prop){
 	{
 		this.initialDirection = this.direction;
 	}
+	if(this.size.equal(new Vector2)){
+		this.size = new Vector2(this.radius,this.radius);
+	}
 	this.creationTime = new Date;
 }
 

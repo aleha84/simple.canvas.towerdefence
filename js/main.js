@@ -56,7 +56,13 @@ $(document).ready(function(){
 			 }
 		});
 
+		var testLight =  new SCG.GO.Light({
+			position: new Vector2(100,100),
+			radius: 70,
+		});
+
 		SCG.go.push(testGo);
+		SCG.go.push(testLight);
 
 		SCG.gameControls.orientationChangeEventInit();
 
