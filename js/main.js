@@ -20,17 +20,9 @@ $(document).ready(function(){
 
 		var fulsscreenToggleButton = $('<div />',
 			{
-				class: 'button',
-				css: {
-					left: '10px',
-					top:'60px',
-					width: '80px',
-					height: '80px',
-					position: 'absolute',
-					'background-color': 'white'
-				},
+				class: 'button fulscreenbutton',
 				on: {
-					click: function(){ screenfull.toggle(document.documentElement); }
+					click: function(){ screenfull.toggle(document.documentElement); $(this).toggleClass('exit'); }
 				}
 			});
 
@@ -41,30 +33,33 @@ $(document).ready(function(){
 	SCG.gameControls.selectedGOs = [];
 
 	initializer(function(){
+		SCG.gameControls.orientationChangeEventInit();
+
 		var testGo = new SCG.GO.GO({
 			img : SCG.images.test,
 			position: new Vector2(200,200),
 			id : 'test',
 			radius: 20,
-			speed: 3,
+			speed: 0.1,
 			internalUpdate: function(){ 
 				if(this.destination == undefined)
 				{
-					this.destination = new Vector2(getRandom(12,SCG.battlefield.width-12),getRandom(12, SCG.battlefield.height));
+					this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
 					this.direction = this.position.direction(this.destination);	
 				}
 			 }
 		});
 
-		var testLight =  new SCG.GO.Light({
-			position: new Vector2(100,100),
-			radius: 70,
-		});
-
 		SCG.go.push(testGo);
-		SCG.go.push(testLight);
 
-		SCG.gameControls.orientationChangeEventInit();
+		for(var i = 0; i< 10; i++)
+		{
+			var testLight =  new SCG.GO.Light({
+				position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+				radius: getRandom(50,100),
+			});
+			SCG.go.push(testLight);	
+		}
 
 		SCG.animate();
 	});

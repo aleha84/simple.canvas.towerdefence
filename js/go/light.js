@@ -16,9 +16,15 @@ SCG.GO.Light = function(prop)
 	document.body.appendChild(canvas);
 
 	this.canvas = canvas;
-	this.context = canvas.getContext("2d");
+	this.context = canvas.getContext("2d", {alpha: true});
 	
-	this.internalUpdate();
+	this.statrtingCircleCenter = new Vector2(this.size.x/2, this.size.y/2);
+	this.endingCircleCenter = new Vector2(this.size.x/2, this.size.y/2);
+	this.defaultRadiuses = [1, this.radius/2];
+	this.startingRadius = 1;
+	this.endingRadius = this.radius/2;
+
+	this.internalRender();
 	this.img = this.canvas;
 }
 
@@ -33,14 +39,44 @@ SCG.GO.Light.prototype.setDead = function(){
 }
 
 SCG.GO.Light.prototype.internalRender = function(){ 
-	
+	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	var g = this.context.createRadialGradient(this.statrtingCircleCenter.x, this.statrtingCircleCenter.y, this.startingRadius, this.endingCircleCenter.x, this.endingCircleCenter.y, this.endingRadius);
+	g.addColorStop( 0, 'rgba(255,255,255,0.8)' );
+    g.addColorStop( 1, 'rgba(255,255,255,0)' );
+    this.context.fillStyle = g;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 }
 
 SCG.GO.Light.prototype.internalUpdate = function(now){ 
-	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	var g = this.context.createRadialGradient(this.size.x/2, this.size.y/2, 0, this.size.x/2, this.size.x/2, this.radius/2);
-	g.addColorStop( 0, 'rgba(250,220,150,1)' );
-    g.addColorStop( 1, 'rgba(250,220,150,0)' );
-    this.context.fillStyle = g;
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+	if(this.endingRadiusDelta == undefined)
+	{
+		this.endingRadiusDelta = -0.5;
+	}
+
+	if(this.iterationCount == undefined)
+	{
+		this.iterationCount = 0;	
+	}
+
+	if((this.endingRadiusDelta < 0 && this.defaultRadiuses[0] > (this.endingRadius + this.endingRadiusDelta)) 
+		|| (this.endingRadiusDelta > 0 && this.defaultRadiuses[1] < (this.endingRadius+this.endingRadiusDelta)))
+	{
+		this.endingRadiusDelta*=-1;
+		if(this.endingRadiusDelta > 0)
+		{
+			this.iterationCount++;
+		}
+
+		if(this.iterationCount > 3)
+		{
+			this.setDead();
+			var testLight =  new SCG.GO.Light({
+				position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+				radius: getRandom(50,100),
+			});
+			SCG.go.push(testLight);	
+		}
+	}
+
+	this.endingRadius += this.endingRadiusDelta;
 }
