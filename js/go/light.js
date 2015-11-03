@@ -16,7 +16,7 @@ SCG.GO.Light = function(prop)
 	document.body.appendChild(canvas);
 
 	this.canvas = canvas;
-	this.context = canvas.getContext("2d", {alpha: true});
+	this.context = canvas.getContext("2d");
 	
 	this.statrtingCircleCenter = new Vector2(this.size.x/2, this.size.y/2);
 	this.endingCircleCenter = new Vector2(this.size.x/2, this.size.y/2);
