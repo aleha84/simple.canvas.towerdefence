@@ -147,13 +147,27 @@ SCG.gameControls = {
 			return;
 		}
 
+		//var oldSize = new Vector2(SCG.battlefield.width, SCG.battlefield.height);
+
 		SCG.battlefield.width = SCG.battlefield.default.width * SCG.gameControls.scale.times;
 		SCG.battlefield.height = SCG.battlefield.default.height * SCG.gameControls.scale.times;
+
+		//var sizeChanges = new Vector2(SCG.battlefield.width / oldSize.x, SCG.battlefield.height / oldSize.y);
 
 		$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
 		$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
 		SCG.canvas.width = SCG.battlefield.width;
 		SCG.canvas.height = SCG.battlefield.height;
+
+		// var i = SCG.go.length;
+		// while (i--) {
+		// 	SCG.go[i].position = new Vector2(SCG.go[i].position.x * sizeChanges.x, SCG.go[i].position.y * sizeChanges.y);
+		// }
+
+		// var ni = SCG.nonplayableGo.length;
+		// while (ni--) {
+		// 	SCG.nonplayableGo[ni].update(now);
+		// }
 	},
 	permanentEventInit : function (){
 		var that = this;

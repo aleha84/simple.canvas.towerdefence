@@ -3,6 +3,7 @@ SCG.GO = {};
 SCG.GO.GO = function(prop){
 	this.defaultInitProperties = {};
 	this.position = new Vector2;
+	this.renderPosition = new Vector2;
 	this.alive = true;
 	this.id = '';
 	this.size = new Vector2;
@@ -11,6 +12,7 @@ SCG.GO.GO = function(prop){
 	this.speed = 0;
 	this.angle = 0;
 	this.radius = 10;
+	this.renderRadius = 10;
 	this.img = undefined;
 	this.selected = false;
 	this.playerControllable =false;
@@ -22,6 +24,9 @@ SCG.GO.GO = function(prop){
 	if(this.direction!=undefined)
 	{
 		this.initialDirection = this.direction;
+	}
+	if(this.size.equal(new Vector2)){
+		this.size = new Vector2(this.radius,this.radius);
 	}
 	this.creationTime = new Date;
 }
@@ -42,7 +47,11 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
-		SCG.context.drawImage(this.img, this.position.x - this.radius, this.position.y - this.radius, this.radius * SCG.gameControls.scale.times, this.radius * SCG.gameControls.scale.times);
+		SCG.context.drawImage(this.img, 
+			(this.renderPosition.x - this.renderRadius), 
+			(this.renderPosition.y - this.renderRadius), 
+			this.renderRadius, 
+			this.renderRadius);
 
 		this.internalRender();
 	},
@@ -64,6 +73,9 @@ SCG.GO.GO.prototype = {
 			this.position.add(this.direction.mul(this.speed));
 		}
 		
+		this.renderRadius = this.radius * SCG.gameControls.scale.times;
+		this.renderPosition = new Vector2(this.position.x * SCG.gameControls.scale.times, this.position.y * SCG.gameControls.scale.times);
+
 		this.internalUpdate(now);
 	},
 
