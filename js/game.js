@@ -177,13 +177,16 @@ SCG.gameControls = {
 		$(document).on('keyup',function(e){
 			that.permanentKeyUp(e);
 		});
-		$(SCG.canvas).on('mousedown',function(e){
+		$(SCG.canvas).on('mousedown touchstart',function(e){
+			absorbTouchEvent(e);
 			that.mouseDown(e);
 		});
-		$(SCG.canvas).on('mouseup',function(e){
+		$(SCG.canvas).on('mouseup touchend',function(e){
+			absorbTouchEvent(e);
 			that.mouseUp(e);
 		});
-		$(SCG.canvas).on('mouseout',function(e){
+		$(SCG.canvas).on('mouseout touchleave',function(e){
+			absorbTouchEvent(e);
 			that.mouseOut(e);
 		});
 
