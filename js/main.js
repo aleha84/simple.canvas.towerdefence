@@ -40,12 +40,14 @@ $(document).ready(function(){
 			position: new Vector2(200,200),
 			id : 'test',
 			radius: 20,
-			speed: 0.1,
+			speed: 0.5,
+			path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
 			internalUpdate: function(){ 
 				if(this.destination == undefined)
 				{
-					this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
-					this.direction = this.position.direction(this.destination);	
+					// this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
+					// this.direction = this.position.direction(this.destination);	
+					this.setDead();
 				}
 			 }
 		});

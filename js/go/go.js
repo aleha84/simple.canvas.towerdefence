@@ -17,6 +17,7 @@ SCG.GO.GO = function(prop){
 	this.selected = false;
 	this.playerControllable =false;
 	this.destination = undefined;
+	this.path = [];
 	if(prop!=undefined)
 	{
 		$.extend(this,prop);
@@ -47,6 +48,8 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
+		this.internalPreRender();
+
 		SCG.context.drawImage(this.img, 
 			(this.renderPosition.x - this.renderRadius), 
 			(this.renderPosition.y - this.renderRadius), 
@@ -54,6 +57,10 @@ SCG.GO.GO.prototype = {
 			this.renderRadius);
 
 		this.internalRender();
+	},
+
+	internalPreRender: function(){
+
 	},
 
 	internalRender: function(){
@@ -66,11 +73,24 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
-		if(this.destination && this.position.distance(this.destination) < 10){
-			this.destination = undefined;
+		this.internalPreUpdate();
+
+		if(this.destination)
+		{
+			if(this.position.distance(this.destination) <= this.speed){
+				this.setDestination();
+			}
+			else{
+				this.position.add(this.direction.mul(this.speed));
+			}	
 		}
-		else{
-			this.position.add(this.direction.mul(this.speed));
+
+		if(this.destination == undefined)
+		{
+			if(this.path.length > 0)
+			{
+				this.setDestination(this.path.shift());
+			}
 		}
 		
 		this.renderRadius = this.radius * SCG.gameControls.scale.times;
@@ -79,8 +99,24 @@ SCG.GO.GO.prototype = {
 		this.internalUpdate(now);
 	},
 
+	internalPreUpdate: function(){
+
+	},
+
 	internalUpdate: function(){
 
+	},
+
+	setDestination: function(newDestination)
+	{
+		if(newDestination !== undefined && newDestination instanceof Vector2){
+			this.destination = newDestination;
+			this.direction = this.position.direction(this.destination);
+		}
+		else{
+			this.destination = undefined;
+			this.direction = new Vector2;
+		}
 	},
 
 	renderSelectBox: function(){
