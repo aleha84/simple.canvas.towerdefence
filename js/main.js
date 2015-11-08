@@ -1,6 +1,7 @@
 SCG.src = {
 	background: 'content/images/background.jpg',
 	test: 'content/images/test.jpg',
+	emptyDefencePoint: 'content/images/emptyDefencePoint.png',
 }
 
 SCG.images = {
@@ -34,7 +35,8 @@ $(document).ready(function(){
 
 	initializer(function(){
 		SCG.gameControls.orientationChangeEventInit();
-
+		SCG.GO.DefenderState.empty.img = SCG.images.emptyDefencePoint;
+		
 		var testGo = new SCG.GO.GO({
 			img : SCG.images.test,
 			position: new Vector2(200,200),
@@ -53,6 +55,12 @@ $(document).ready(function(){
 		});
 
 		SCG.go.push(testGo);
+
+		var testDefender = new SCG.GO.Defender({
+			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height))
+		});
+
+		SCG.go.push(testDefender);
 
 		for(var i = 0; i< 10; i++)
 		{
