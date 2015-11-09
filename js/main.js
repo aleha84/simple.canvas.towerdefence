@@ -1,6 +1,7 @@
 SCG.src = {
 	background: 'content/images/background.jpg',
 	test: 'content/images/test.jpg',
+	emptyDefencePoint: 'content/images/emptyDefencePoint.png',
 }
 
 SCG.images = {
@@ -34,32 +35,42 @@ $(document).ready(function(){
 
 	initializer(function(){
 		SCG.gameControls.orientationChangeEventInit();
-
+		SCG.GO.DefenderState.empty.img = SCG.images.emptyDefencePoint;
+		
 		var testGo = new SCG.GO.GO({
 			img : SCG.images.test,
 			position: new Vector2(200,200),
 			id : 'test',
 			radius: 20,
-			speed: 0.1,
+			speed: 0.5,
+			path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
 			internalUpdate: function(){ 
 				if(this.destination == undefined)
 				{
-					this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
-					this.direction = this.position.direction(this.destination);	
+					// this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
+					// this.direction = this.position.direction(this.destination);	
+					this.setDead();
 				}
 			 }
 		});
 
 		SCG.go.push(testGo);
 
-		for(var i = 0; i< 10; i++)
-		{
-			var testLight =  new SCG.GO.Light({
-				position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-				radius: getRandom(50,100),
-			});
-			SCG.go.push(testLight);	
-		}
+		var testDefender = new SCG.GO.Defender({
+			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+			radius: 20,
+		});
+
+		SCG.go.push(testDefender);
+
+		// for(var i = 0; i< 10; i++)
+		// {
+		// 	var testLight =  new SCG.GO.Light({
+		// 		position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+		// 		radius: getRandom(50,100),
+		// 	});
+		// 	SCG.go.push(testLight);	
+		// }
 
 		SCG.animate();
 	});
