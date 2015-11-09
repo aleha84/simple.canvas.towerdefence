@@ -57,19 +57,20 @@ $(document).ready(function(){
 		SCG.go.push(testGo);
 
 		var testDefender = new SCG.GO.Defender({
-			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height))
+			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+			radius: 20,
 		});
 
 		SCG.go.push(testDefender);
 
-		for(var i = 0; i< 10; i++)
-		{
-			var testLight =  new SCG.GO.Light({
-				position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-				radius: getRandom(50,100),
-			});
-			SCG.go.push(testLight);	
-		}
+		// for(var i = 0; i< 10; i++)
+		// {
+		// 	var testLight =  new SCG.GO.Light({
+		// 		position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+		// 		radius: getRandom(50,100),
+		// 	});
+		// 	SCG.go.push(testLight);	
+		// }
 
 		SCG.animate();
 	});
