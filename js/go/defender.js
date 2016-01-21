@@ -3,6 +3,7 @@ SCG.GO.DefenderState = {
 		img: undefined,
 		lightProp : {
 			position: new Vector2,
+			size: new Vector2(30,30),
 			defaultRadiuses : [0, 20],
 			colorStops : [
 				{ offset: 0, color: 'rgba(255,255,255,0)' },
@@ -28,6 +29,9 @@ SCG.GO.Defender = function(prop)
 
 	this.state = undefined;
 	this.light = undefined;
+	this.menu = undefined;
+
+	this.shouldRenderMenu = false;
 
 	this.setState();
 }
@@ -35,6 +39,12 @@ SCG.GO.Defender = function(prop)
 SCG.GO.Defender.counter = 0;
 SCG.GO.Defender.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
+
+SCG.GO.Defender.prototype.setMenu = function(menu)
+{
+	menu.parent = this;
+	this.menu = menu;
+}
 
 SCG.GO.Defender.prototype.setState = function(state)
 {
@@ -48,11 +58,11 @@ SCG.GO.Defender.prototype.setState = function(state)
 
 	if(this.state.lightProp != undefined)
 	{
-		this.state.lightProp.radius = this.radius*4;
-		this.state.lightProp.position = new Vector2(this.state.lightProp.radius/2 - this.radius/2,this.state.lightProp.radius/2 - this.radius/2);
-		this.state.lightProp.defaultRadiuses[1] = this.radius; 
-		this.state.lightProp.endingRadiusClamps[0] = this.radius*0.8; 
-		this.state.lightProp.endingRadiusClamps[1] = this.radius; 
+		this.state.lightProp.radius = this.size.x;
+		this.state.lightProp.position = new Vector2(this.state.lightProp.radius/2 - this.size.x/2,this.state.lightProp.radius/2 - this.size.y/2);
+		this.state.lightProp.defaultRadiuses[1] = this.size.x; 
+		this.state.lightProp.endingRadiusClamps[0] = this.size.x*0.6; 
+		this.state.lightProp.endingRadiusClamps[1] = this.size.x*0.8; 
 		this.light = new SCG.GO.Light(this.state.lightProp)
 	}
 }
@@ -68,9 +78,24 @@ SCG.GO.Defender.prototype.internalPreRender = function(){
 	}
 }
 
+SCG.GO.Defender.prototype.internalRender = function(){ 
+	if(this.shouldRenderMenu && this.menu != undefined)
+	{
+		this.menu.render();
+	}
+}
+
 SCG.GO.Defender.prototype.internalPreUpdate = function(){ 
 	if(this.light != undefined)
 	{
 		this.light.update();
+	}
+}
+
+SCG.GO.Defender.prototype.internalUpdate = function(now){ 
+	this.shouldRenderMenu = SCG.gameControls.mousestate.leftButtonDown && (this.mouseOver || this.menu.mouseOver);
+	if(this.shouldRenderMenu && this.menu != undefined)
+	{
+		this.menu.update();
 	}
 }

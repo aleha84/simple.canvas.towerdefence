@@ -14,7 +14,7 @@ $(document).ready(function(){
 			width: SCG.battlefield.width,
 			height: SCG.battlefield.height
 		});
-		c.attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
+		c.attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height,id:SCG.canvasId});
 		$(document.body).append(c);
 		SCG.canvas = c.get(0);
 		SCG.context = SCG.canvas.getContext('2d');
@@ -41,7 +41,7 @@ $(document).ready(function(){
 			img : SCG.images.test,
 			position: new Vector2(200,200),
 			id : 'test',
-			radius: 20,
+			size: new Vector2(20,20),
 			speed: 0.5,
 			path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
 			internalUpdate: function(){ 
@@ -58,8 +58,10 @@ $(document).ready(function(){
 
 		var testDefender = new SCG.GO.Defender({
 			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-			radius: 20,
+			size: new Vector2(20,20),
 		});
+
+		testDefender.setMenu(new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2}));
 
 		SCG.go.push(testDefender);
 

@@ -46,16 +46,16 @@ function Box(topLeft,size){
 		else{
 			$.extend(prop, options);
 		}
-		SCG2.context.beginPath();	
-		SCG2.context.rect(this.topLeft.x, this.topLeft.y, this.size.x, this.size.y);
+		SCG.context.beginPath();	
+		SCG.context.rect(this.topLeft.x, this.topLeft.y, this.size.x, this.size.y);
 		if(prop.fill){
-			SCG2.context.fillStyle = prop.fillStyle;
-			SCG2.context.fill();	
+			SCG.context.fillStyle = prop.fillStyle;
+			SCG.context.fill();	
 		}
-		SCG2.context.lineWidth = prop.lineWidth;
-		SCG2.context.strokeStyle = prop.strokeStyle;
-		SCG2.context.closePath();
-		SCG2.context.stroke();
+		SCG.context.lineWidth = prop.lineWidth;
+		SCG.context.strokeStyle = prop.strokeStyle;
+		SCG.context.closePath();
+		SCG.context.stroke();
 	}
 }
 

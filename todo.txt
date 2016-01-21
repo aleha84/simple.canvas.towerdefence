@@ -1,0 +1,13 @@
+- Placeholder
+- Placeholder selection
+-- Selection Animation
+-- Selection items
+--- Item select
+- Enemy
+-- Path
+-- Movement
+-- Path end
+- Units
+-- Defending
+-- Upgrade
+-- Idle

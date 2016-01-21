@@ -7,17 +7,25 @@ SCG.GO.GO = function(prop){
 	this.alive = true;
 	this.id = '';
 	this.size = new Vector2;
+	this.renderSize = new Vector2;
 	this.initialDirection = new Vector2;
 	this.direction = new Vector2;
 	this.speed = 0;
 	this.angle = 0;
-	this.radius = 10;
+	//this.radius = 10;
 	this.renderRadius = 10;
 	this.img = undefined;
 	this.selected = false;
 	this.playerControllable =false;
 	this.destination = undefined;
 	this.path = [];
+	this.mouseOver = false;
+
+	if(prop.size == undefined || prop.size.equal(new Vector2))
+	{
+		throw 'SCG2.GO.Defender -> size is undefined';
+	}
+
 	if(prop!=undefined)
 	{
 		$.extend(this,prop);
@@ -26,9 +34,9 @@ SCG.GO.GO = function(prop){
 	{
 		this.initialDirection = this.direction;
 	}
-	if(this.size.equal(new Vector2)){
-		this.size = new Vector2(this.radius,this.radius);
-	}
+	// if(this.size.equal(new Vector2)){
+	// 	this.size = new Vector2(this.radius,this.radius);
+	// }
 	this.creationTime = new Date;
 }
 
@@ -44,17 +52,20 @@ SCG.GO.GO.prototype = {
 	},
 
 	render: function(){ 
-		if(!this.alive || this.img == undefined){
+		if(!this.alive){
 			return false;
 		}
 
 		this.internalPreRender();
 
-		SCG.context.drawImage(this.img, 
-			(this.renderPosition.x - this.renderRadius), 
-			(this.renderPosition.y - this.renderRadius), 
-			this.renderRadius, 
-			this.renderRadius);
+		if(this.img != undefined)
+		{
+			SCG.context.drawImage(this.img, 
+				(this.renderPosition.x - this.renderSize.x/2), 
+				(this.renderPosition.y - this.renderSize.y/2), 
+				this.renderSize.x, 
+				this.renderSize.y);	
+		}
 
 		this.internalRender();
 	},
@@ -72,6 +83,8 @@ SCG.GO.GO.prototype = {
 		if(!this.alive || SCG.gameLogics.isPaused || SCG.gameLogics.gameOver || SCG.gameLogics.wrongDeviceOrientation){
 			return false;
 		}
+
+		this.mouseOver = false;
 
 		this.internalPreUpdate();
 
@@ -93,8 +106,12 @@ SCG.GO.GO.prototype = {
 			}
 		}
 		
-		this.renderRadius = this.radius * SCG.gameControls.scale.times;
+		//this.renderRadius = this.radius * SCG.gameControls.scale.times;
+		this.renderSize = this.size.mul(SCG.gameControls.scale.times);
 		this.renderPosition = new Vector2(this.position.x * SCG.gameControls.scale.times, this.position.y * SCG.gameControls.scale.times);
+
+		this.boundingBox = new Box(new Vector2(this.renderPosition.x - this.renderSize.x/2, this.renderPosition.y - this.renderSize.y/2), this.renderSize);
+		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
 
 		this.internalUpdate(now);
 	},
