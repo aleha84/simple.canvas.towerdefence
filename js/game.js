@@ -10,6 +10,8 @@ SCG.battlefield = {
 };
 
 SCG.canvas = undefined;
+SCG.canvasId = "mainCanvas";
+SCG.canvasIdSelector = "#"+SCG.canvasId;
 SCG.context = undefined;
 SCG.gameLogics = {
 	isPaused: false,
@@ -98,6 +100,14 @@ SCG.gameControls = {
 		};
 		SCG.gameControls.selectedGOs = [];
 	},
+	mouseMove: function(event){
+		var oldPosition = SCG.gameControls.mousestate.position.clone();
+		var eventPos = pointerEventToXY(event);
+
+		SCG.gameControls.mousestate.position = new Vector2(eventPos.x,eventPos.y);
+		SCG.gameControls.mousestate.delta = SCG.gameControls.mousestate.position.substract(oldPosition,true);
+		console.log(SCG.gameControls.mousestate.position);
+	},
 	orientationChangeEventInit: function() {
 		var that = this;
 		$(window).on('orientationchange resize', function(e){
@@ -177,20 +187,23 @@ SCG.gameControls = {
 		$(document).on('keyup',function(e){
 			that.permanentKeyUp(e);
 		});
-		$(SCG.canvas).on('mousedown touchstart',function(e){
+		$(document).on('mousedown touchstart', SCG.canvasIdSelector,function(e){
 			absorbTouchEvent(e);
 			that.mouseDown(e);
 		});
-		$(SCG.canvas).on('mouseup touchend',function(e){
+		$(document).on('mouseup touchend', SCG.canvasIdSelector, function(e){
 			absorbTouchEvent(e);
 			that.mouseUp(e);
 		});
-		$(SCG.canvas).on('mouseout touchleave',function(e){
+		$(document).on('mouseout touchleave', SCG.canvasIdSelector, function(e){
 			absorbTouchEvent(e);
 			that.mouseOut(e);
 		});
-
-		$(SCG.canvas).on('contextmenu',function(e){
+		$(document).on('mousemove touchmove', SCG.canvasIdSelector, function(e){
+			absorbTouchEvent(e); 
+			that.mouseMove(e);
+		});
+		$(document).on('contextmenu',SCG.canvasIdSelector, function(e){
 			e.preventDefault();
 			return false;
 		});
