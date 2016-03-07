@@ -28,3 +28,12 @@ html, body {
 {
 	background-image: url(../images/fullscreen_exit.png);	
 }
+
+.debugger
+{
+	position: absolute;
+	top:10px;
+	left: 10px;
+	color: black;
+	font-size: 12px;
+}
