@@ -189,8 +189,10 @@ SCG.gameControls = {
 
 		var _width = $(window).width();
 		var _height = $(window).height();
+		var ratioX = _width /SCG.battlefield.default.width;
+		var ratioY = _height / SCG.battlefield.default.height;
 
-		SCG.gameControls.scale.times = _width > _height ? _height / SCG.battlefield.default.height : _width /SCG.battlefield.default.width;
+		SCG.gameControls.scale.times = Math.min(ratioX, ratioY); //_width > _height ? _height / SCG.battlefield.default.height : _width /SCG.battlefield.default.width;
 
 		if(SCG.gameControls.scale.times < 1)
 		{
@@ -206,8 +208,21 @@ SCG.gameControls = {
 
 		//var sizeChanges = new Vector2(SCG.battlefield.width / oldSize.x, SCG.battlefield.height / oldSize.y);
 
+		var pTop = 0;
+		var pLeft = 0;
+		if(SCG.battlefield.width < _width)
+		{
+			pLeft = (_width - SCG.battlefield.width)/2;
+		}
+		else if(SCG.battlefield.height < _height)
+		{
+			pTop = (_height - SCG.battlefield.height)/2
+		}
+
 		$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
 		$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
+		$(SCG.canvas).css({'padding-top': pTop });
+		$(SCG.canvas).css({'padding-left': pLeft });
 		SCG.canvas.width = SCG.battlefield.width;
 		SCG.canvas.height = SCG.battlefield.height;
 
