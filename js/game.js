@@ -124,6 +124,8 @@ SCG.gameControls = {
 
 		SCG.gameControls.mousestate.position = new Vector2(eventPos.x,eventPos.y);
 		SCG.gameControls.mousestate.delta = SCG.gameControls.mousestate.position.substract(oldPosition,true);
+
+		SCG.debugger.setValue(SCG.gameControls.mousestate.position.toString());
 		//console.log(SCG.gameControls.mousestate.position);
 	},
 	orientationChangeEventInit: function() {
@@ -207,27 +209,22 @@ SCG.gameControls = {
 		});
 		$(document).on('mousedown touchstart', SCG.canvasIdSelector,function(e){
 			absorbTouchEvent(e);
-			SCG.debugger.setValue(e.type);
 			that.mouseDown(e);
 		});
 		$(document).on('mouseup touchend', SCG.canvasIdSelector, function(e){
 			absorbTouchEvent(e);
-			SCG.debugger.setValue(e.type);
 			that.mouseUp(e);
 		});
 		$(document).on('mouseout touchleave', SCG.canvasIdSelector, function(e){
 			absorbTouchEvent(e);
-			SCG.debugger.setValue(e.type);
 			that.mouseOut(e);
 		});
 		$(document).on('mousemove touchmove', SCG.canvasIdSelector, function(e){
 			absorbTouchEvent(e); 
-			SCG.debugger.setValue(e.type);
 			that.mouseMove(e);
 		});
 		$(document).on('contextmenu',SCG.canvasIdSelector, function(e){
 			e.preventDefault();
-			SCG.debugger.setValue(e.type);
 			return false;
 		});
 	},
