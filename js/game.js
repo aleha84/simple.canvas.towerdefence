@@ -79,7 +79,7 @@ SCG.gameControls = {
 	mouseDown: function(event){
 		if(event.type == 'touchstart')
 		{
-			if(event.changedTouches != undefined && event.changedTouches.length == 1)
+			if(event.originalEvent.changedTouches != undefined && event.originalEvent.changedTouches.length == 1)
 			{
 				SCG.gameControls.mousestate.leftButtonDown = true;
 			}
@@ -108,7 +108,7 @@ SCG.gameControls = {
 	mouseUp: function(event){
 		if(event.type == 'touchstart')
 		{
-			if(event.changedTouches != undefined && event.changedTouches.length == 1)
+			if(event.originalEvent.changedTouches != undefined && event.originalEvent.changedTouches.length == 1)
 			{
 				SCG.gameControls.mousestate.leftButtonDown = false;
 			}
