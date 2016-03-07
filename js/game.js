@@ -74,39 +74,58 @@ SCG.gameControls = {
 	},
 	selectedGOs : [],
 	mouseDown: function(event){
-		switch (event.which) {
-	        case 1:
-	            SCG.gameControls.mousestate.leftButtonDown = true;
-	            break;
-	        case 2:
-	            SCG.gameControls.mousestate.middleButtonDown = true;
-	            break;
-	        case 3:
-	            SCG.gameControls.mousestate.rightButtonDown = true;
-	            break;
-	        default:
-	            SCG.gameControls.mousestate.reset();
-	            break;
-	    }
+		if(event.type == 'touchstart')
+		{
+			if(event.changedTouches != undefined && event.changedTouches.length == 1)
+			{
+				SCG.gameControls.mousestate.leftButtonDown = true;
+			}
+		}
+		else{
+			switch (event.which) {
+		        case 1:
+		            SCG.gameControls.mousestate.leftButtonDown = true;
+		            break;
+		        case 2:
+		            SCG.gameControls.mousestate.middleButtonDown = true;
+		            break;
+		        case 3:
+		            SCG.gameControls.mousestate.rightButtonDown = true;
+		            break;
+		        default:
+		            SCG.gameControls.mousestate.reset();
+		            break;
+	    	}
+		}
+		
 	},
 	mouseOut: function(event){
 		SCG.gameControls.mousestate.reset();
 	},
 	mouseUp: function(event){
-		switch (event.which) {
-	        case 1:
-	            SCG.gameControls.mousestate.leftButtonDown = false;
-	            break;
-	        case 2:
-	            SCG.gameControls.mousestate.middleButtonDown = false;
-	            break;
-	        case 3:
-	            SCG.gameControls.mousestate.rightButtonDown = false;
-	            break;
-	        default:
-	            SCG.gameControls.mousestate.reset();
-	            break;
-	    }
+		if(event.type == 'touchstart')
+		{
+			if(event.changedTouches != undefined && event.changedTouches.length == 1)
+			{
+				SCG.gameControls.mousestate.leftButtonDown = false;
+			}
+		}
+		else{
+			switch (event.which) {
+		        case 1:
+		            SCG.gameControls.mousestate.leftButtonDown = false;
+		            break;
+		        case 2:
+		            SCG.gameControls.mousestate.middleButtonDown = false;
+		            break;
+		        case 3:
+		            SCG.gameControls.mousestate.rightButtonDown = false;
+		            break;
+		        default:
+		            SCG.gameControls.mousestate.reset();
+		            break;
+		    }
+		}
 
 		/*simple selection, without selection rectangle and checking for mouse buttons*/
 
@@ -209,6 +228,10 @@ SCG.gameControls = {
 		});
 		$(document).on('mousedown touchstart', SCG.canvasIdSelector,function(e){
 			absorbTouchEvent(e);
+			if(e.type == 'touchstart')
+			{
+				that.mouseMove(e);
+			}
 			that.mouseDown(e);
 		});
 		$(document).on('mouseup touchend', SCG.canvasIdSelector, function(e){
