@@ -28,6 +28,7 @@ $(document).ready(function(){
 			});
 
 		$(document.body).append(fulsscreenToggleButton);
+		SCG.debugger.setValue('App started');
 	}
 
 	SCG.nonplayableGo = [];
