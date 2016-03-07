@@ -11,3 +11,5 @@
 -- Defending
 -- Upgrade
 -- Idle
+
+-Resize. Scale.
