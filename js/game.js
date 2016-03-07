@@ -65,6 +65,9 @@ SCG.gameControls = {
 		},
 		stopped : function(){
 			SCG.gameControls.mousestate.delta = new Vector2;
+		},
+		toString: function(){
+			return String.format('position: {0}<br/>leftButtonDown: {1}', this.position.toString(), this.leftButtonDown);
 		}
 	},
 	keyboardstate: {
@@ -144,7 +147,7 @@ SCG.gameControls = {
 		SCG.gameControls.mousestate.position = new Vector2(eventPos.x,eventPos.y);
 		SCG.gameControls.mousestate.delta = SCG.gameControls.mousestate.position.substract(oldPosition,true);
 
-		SCG.debugger.setValue(SCG.gameControls.mousestate.position.toString());
+		SCG.debugger.setValue(SCG.gameControls.mousestate.toString());
 		//console.log(SCG.gameControls.mousestate.position);
 	},
 	orientationChangeEventInit: function() {
