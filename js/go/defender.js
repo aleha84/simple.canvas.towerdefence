@@ -56,15 +56,15 @@ SCG.GO.Defender.prototype.setState = function(state)
 	this.state = state;
 	this.img = state.img;
 
-	if(this.state.lightProp != undefined)
-	{
-		this.state.lightProp.radius = this.size.x;
-		this.state.lightProp.position = new Vector2(this.state.lightProp.radius/2 - this.size.x/2,this.state.lightProp.radius/2 - this.size.y/2);
-		this.state.lightProp.defaultRadiuses[1] = this.size.x; 
-		this.state.lightProp.endingRadiusClamps[0] = this.size.x*0.6; 
-		this.state.lightProp.endingRadiusClamps[1] = this.size.x*0.8; 
-		this.light = new SCG.GO.Light(this.state.lightProp)
-	}
+	// if(this.state.lightProp != undefined)
+	// {
+	// 	this.state.lightProp.radius = this.size.x;
+	// 	this.state.lightProp.position = new Vector2(this.state.lightProp.radius/2 - this.size.x/2,this.state.lightProp.radius/2 - this.size.y/2);
+	// 	this.state.lightProp.defaultRadiuses[1] = this.size.x; 
+	// 	this.state.lightProp.endingRadiusClamps[0] = this.size.x*0.6; 
+	// 	this.state.lightProp.endingRadiusClamps[1] = this.size.x*0.8; 
+	// 	this.light = new SCG.GO.Light(this.state.lightProp)
+	// }
 }
 
 SCG.GO.Defender.prototype.internalPreRender = function(){ 
