@@ -143,8 +143,8 @@ SCG.gameControls = {
 	mouseMove: function(event){
 		var oldPosition = SCG.gameControls.mousestate.position.clone();
 		var eventPos = pointerEventToXY(event);
-
-		SCG.gameControls.mousestate.position = new Vector2(eventPos.x,eventPos.y);
+		var offset = $(SCG.canvas).offset();
+		SCG.gameControls.mousestate.position = new Vector2(eventPos.x - SCG.canvas.margins.left,eventPos.y - SCG.canvas.margins.top);
 		SCG.gameControls.mousestate.delta = SCG.gameControls.mousestate.position.substract(oldPosition,true);
 
 		SCG.debugger.setValue(SCG.gameControls.mousestate.toString());
@@ -208,23 +208,27 @@ SCG.gameControls = {
 
 		//var sizeChanges = new Vector2(SCG.battlefield.width / oldSize.x, SCG.battlefield.height / oldSize.y);
 
-		var pTop = 0;
-		var pLeft = 0;
+		var mTop = 0;
+		var mLeft = 0;
 		if(SCG.battlefield.width < _width)
 		{
-			pLeft = (_width - SCG.battlefield.width)/2;
+			mLeft = Math.round((_width - SCG.battlefield.width)/2);
 		}
 		else if(SCG.battlefield.height < _height)
 		{
-			pTop = (_height - SCG.battlefield.height)/2
+			mTop = Math.round((_height - SCG.battlefield.height)/2);
 		}
 
 		$(SCG.canvas).attr({'width':SCG.battlefield.width,'height':SCG.battlefield.height})
 		$(SCG.canvas).css({'width':SCG.battlefield.width,'height':SCG.battlefield.height});
-		$(SCG.canvas).css({'padding-top': pTop });
-		$(SCG.canvas).css({'padding-left': pLeft });
+		$(SCG.canvas).css({'margin-top': mTop });
+		$(SCG.canvas).css({'margin-left': mLeft });
 		SCG.canvas.width = SCG.battlefield.width;
 		SCG.canvas.height = SCG.battlefield.height;
+		SCG.canvas.margins = {
+			top : mTop,
+			left: mLeft
+		};
 
 		// var i = SCG.go.length;
 		// while (i--) {
