@@ -43,6 +43,11 @@ SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
 SCG.GO.Defender.prototype.setMenu = function(menu)
 {
 	menu.parent = this;
+	menu.position = this.position.substract(new Vector2(0,menu.size.y-this.size.y),true)
+	for(var i=0;i<menu.items.length;i++)
+	{
+		menu.items[i].position = menu.position.add(menu.items[i].position,true);
+	}
 	this.menu = menu;
 }
 
@@ -93,7 +98,7 @@ SCG.GO.Defender.prototype.internalPreUpdate = function(){
 }
 
 SCG.GO.Defender.prototype.internalUpdate = function(now){ 
-	this.shouldRenderMenu = SCG.gameControls.mousestate.leftButtonDown && (this.mouseOver || this.menu.mouseOver);
+	this.shouldRenderMenu = (SCG.gameControls.mousestate.leftButtonDown || SCG.gameControls.mousestate.click.isClick) && (this.mouseOver || this.menu.mouseOver);
 	if(this.shouldRenderMenu && this.menu != undefined)
 	{
 		this.menu.update();

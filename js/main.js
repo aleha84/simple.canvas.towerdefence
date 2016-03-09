@@ -2,6 +2,8 @@ SCG.src = {
 	background: 'content/images/background.jpg',
 	test: 'content/images/test.jpg',
 	emptyDefencePoint: 'content/images/emptyDefencePoint.png',
+	cross: 'content/images/cross.png',
+	check: 'content/images/check.png'
 }
 
 SCG.images = {
@@ -62,7 +64,16 @@ $(document).ready(function(){
 			size: new Vector2(20,20),
 		});
 
-		testDefender.setMenu(new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2}));
+		var menuItems = 
+		[
+			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.check, clickCallback: function() { console.log('ok clicked'); }}),
+			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+		];
+
+		var menu = new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2});
+		menu.setItems(menuItems);
+
+		testDefender.setMenu(menu);
 
 		SCG.go.push(testDefender);
 
@@ -86,6 +97,8 @@ SCG.animate = function() {
 
 SCG.draw = function(){
 	var now = new Date;
+
+	SCG.gameControls.mousestate.doClickCheck();
 
 	//draw background
 	SCG.context.drawImage(SCG.images.background,0,0,SCG.battlefield.width,SCG.battlefield.height);
