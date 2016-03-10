@@ -29,6 +29,6 @@ SCG.GO.MenuItem.prototype.internalRender = function(){
 SCG.GO.MenuItem.prototype.internalUpdate = function(){ 
 	if(this.mouseOver && SCG.gameControls.mousestate.click.isClick)
 	{
-		this.clickCallback();
+		this.clickCallback(this);
 	}
 }

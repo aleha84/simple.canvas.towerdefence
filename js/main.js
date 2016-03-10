@@ -3,7 +3,12 @@ SCG.src = {
 	test: 'content/images/test.jpg',
 	emptyDefencePoint: 'content/images/emptyDefencePoint.png',
 	cross: 'content/images/cross.png',
-	check: 'content/images/check.png'
+	check: 'content/images/check.png',
+	upgrade: 'content/images/upgrade.png',
+	wooden_fence: 'content/images/wooden_fence.png',
+	placeholder: 'content/images/placeholder.png',
+	defender_soldier: 'content/images/defender_soldier.png',
+	add_soldier: 'content/images/add_soldier.png',
 }
 
 SCG.images = {
@@ -38,8 +43,8 @@ $(document).ready(function(){
 
 	initializer(function(){
 		SCG.gameControls.orientationChangeEventInit();
-		SCG.GO.DefenderState.empty.img = SCG.images.emptyDefencePoint;
-		
+		SCG.GO.DefenderState.init();
+
 		var testGo = new SCG.GO.GO({
 			img : SCG.images.test,
 			position: new Vector2(200,200),
@@ -61,19 +66,26 @@ $(document).ready(function(){
 
 		var testDefender = new SCG.GO.Defender({
 			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-			size: new Vector2(20,20),
+			size: new Vector2(30,30),
 		});
 
-		var menuItems = 
-		[
-			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.check, clickCallback: function() { console.log('ok clicked'); }}),
-			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-		];
+		// var menuItems = 
+		// [
+		// 	new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
+		// 		clickCallback: function(context) { 
+		// 			console.log('ok clicked'); 
+		// 			if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+		// 			{
+		// 				context.parent.parent.upgrade();
+		// 			}
+		// 		}}),
+		// 	new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+		// ];
 
-		var menu = new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2});
-		menu.setItems(menuItems);
+		// var menu = new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2});
+		// menu.setItems(menuItems);
 
-		testDefender.setMenu(menu);
+		// testDefender.setMenu(menu);
 
 		SCG.go.push(testDefender);
 

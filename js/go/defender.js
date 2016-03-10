@@ -1,19 +1,57 @@
 SCG.GO.DefenderState = {
 	empty: {
+		name: 'empty',
+		upgradeTo : 'woodenFence',
 		img: undefined,
-		lightProp : {
-			position: new Vector2,
-			size: new Vector2(30,30),
-			defaultRadiuses : [0, 20],
-			colorStops : [
-				{ offset: 0, color: 'rgba(255,255,255,0)' },
-				//{ offset: 0.1, color: 'rgba(255,255,255,0.5)' },
-				{ offset: 0.5, color: 'rgba(255,255,255,0.8)' },
-				{ offset: 1, color: 'rgba(255,255,255,0)' },
-			],
-			endingRadiusClamps : [17,20],
-			endingRadiusDelta : -0.25
+		maxDefendersCount: 0,
+		getMenuItems: function(){
+			return [
+				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
+					clickCallback: function(context) { 
+						console.log('ok clicked'); 
+						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+						{
+							context.parent.parent.upgrade();
+						}
+					}}),
+				//new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+			];
 		}
+		// lightProp : {
+		// 	position: new Vector2,
+		// 	size: new Vector2(30,30),
+		// 	defaultRadiuses : [0, 20],
+		// 	colorStops : [
+		// 		{ offset: 0, color: 'rgba(255,255,255,0)' },
+		// 		//{ offset: 0.1, color: 'rgba(255,255,255,0.5)' },
+		// 		{ offset: 0.5, color: 'rgba(255,255,255,0.8)' },
+		// 		{ offset: 1, color: 'rgba(255,255,255,0)' },
+		// 	],
+		// 	endingRadiusClamps : [17,20],
+		// 	endingRadiusDelta : -0.25
+		// }
+	},
+	woodenFence: {
+		name: 'woodenFence',
+		img: undefined,
+		maxDefendersCount : 3,
+		getMenuItems: function(){
+			return [
+				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.add_soldier, 
+					clickCallback: function(context) { 
+						console.log('add clicked'); 
+						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+						{
+							context.parent.parent.addDefender();
+						}
+					}}),
+				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+			];
+		}
+	},
+	init: function(){
+		this.empty.img = SCG.images.placeholder;
+		this.woodenFence.img = SCG.images.wooden_fence;
 	}
 }
 
@@ -33,6 +71,8 @@ SCG.GO.Defender = function(prop)
 
 	this.shouldRenderMenu = false;
 
+	this.defenderSoldiers = [];
+
 	this.setState();
 }
 
@@ -51,6 +91,35 @@ SCG.GO.Defender.prototype.setMenu = function(menu)
 	this.menu = menu;
 }
 
+SCG.GO.Defender.prototype.upgrade = function()
+{
+	if(this.state.upgradeTo == undefined ){ return; }
+	 this.setState(SCG.GO.DefenderState[this.state.upgradeTo]);
+}
+
+SCG.GO.Defender.prototype.addDefender = function()
+{
+	if(this.defenderSoldiers.length < this.state.maxDefendersCount)
+	{
+
+		if(this.defenderSoldiers.length == 0)
+		{
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: this.position.clone()}));
+		}
+		else{
+			var angleStep = 360 / (this.defenderSoldiers.length + 1);
+			var radius = (this.size.x / 2) * 0.3;
+			var up = new Vector2(0, -radius);
+			for(var i = 0;i<this.defenderSoldiers.length; i++)
+			{
+				this.defenderSoldiers[i].position = up.rotate(angleStep*i).add(this.position,true);
+			}
+
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true)}));
+		}
+	}
+}
+
 SCG.GO.Defender.prototype.setState = function(state)
 {
 	if(state === undefined)
@@ -61,6 +130,12 @@ SCG.GO.Defender.prototype.setState = function(state)
 	this.state = state;
 	this.img = state.img;
 
+	var menu = new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2});
+	if(state.getMenuItems){
+		menu.setItems(state.getMenuItems());	
+	}
+
+	this.setMenu(menu);
 	// if(this.state.lightProp != undefined)
 	// {
 	// 	this.state.lightProp.radius = this.size.x;
@@ -84,6 +159,11 @@ SCG.GO.Defender.prototype.internalPreRender = function(){
 }
 
 SCG.GO.Defender.prototype.internalRender = function(){ 
+	for(var i = 0; i< this.defenderSoldiers.length; i++)
+	{
+		this.defenderSoldiers[i].render();
+	}
+
 	if(this.shouldRenderMenu && this.menu != undefined)
 	{
 		this.menu.render();
@@ -102,5 +182,10 @@ SCG.GO.Defender.prototype.internalUpdate = function(now){
 	if(this.shouldRenderMenu && this.menu != undefined)
 	{
 		this.menu.update();
+	}
+
+	for(var i = 0; i< this.defenderSoldiers.length; i++)
+	{
+		this.defenderSoldiers[i].update();
 	}
 }
