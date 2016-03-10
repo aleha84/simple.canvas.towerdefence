@@ -68,6 +68,25 @@ SCG.gameControls = {
 		},
 		toString: function(){
 			return String.format('position: {0}<br/>leftButtonDown: {1}', this.position.toString(), this.leftButtonDown);
+		},
+		doClickCheck: function() {
+			if(this.leftButtonDown)
+			{
+				this.click.prevStateDown = true;
+			}
+			else if(!this.leftButtonDown && this.click.prevStateDown)
+			{
+				this.click.prevStateDown = false;
+				this.click.isClick = true;
+			}
+			else if(this.click.isClick)
+			{
+				this.click.isClick = false;
+			}
+		},
+		click: {
+			prevStateDown: false,
+			isClick : false
 		}
 	},
 	keyboardstate: {
