@@ -20,6 +20,8 @@ SCG.GO.GO = function(prop){
 	this.destination = undefined;
 	this.path = [];
 	this.mouseOver = false;
+	this.randomizeDestination = false;
+	this.randomizeDestinationRadius = new Vector2;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
@@ -45,6 +47,9 @@ SCG.GO.GO.prototype = {
 
 	setDead : function() {
 		this.alive = false;
+		if(this instanceof SCG.GO.EnemySoldier){
+			SCG.EnemySpawner.enemySoldiers.currentCount--;	
+		}
 	},
 
 	isAlive : function(){ 
@@ -88,6 +93,12 @@ SCG.GO.GO.prototype = {
 
 		this.internalPreUpdate();
 
+		// if outside - then remove
+		if(this.position.x < 0 || this.position.y < 0 || this.position.x > SCG.battlefield.default.width || this.position.y > SCG.battlefield.default.height)
+		{
+			this.setDead();
+		}
+
 		if(this.destination)
 		{
 			if(this.position.distance(this.destination) <= this.speed){
@@ -127,6 +138,9 @@ SCG.GO.GO.prototype = {
 	setDestination: function(newDestination)
 	{
 		if(newDestination !== undefined && newDestination instanceof Vector2){
+			if(this.randomizeDestination){
+				newDestination.add(new Vector2(getRandom(-this.randomizeDestinationRadius, this.randomizeDestinationRadius), getRandom(-this.randomizeDestinationRadius, this.randomizeDestinationRadius)));
+			}
 			this.destination = newDestination;
 			this.direction = this.position.direction(this.destination);
 		}

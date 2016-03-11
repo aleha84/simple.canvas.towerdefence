@@ -1,15 +1,8 @@
-- Placeholder
-- Placeholder selection
 -- Selection Animation
--- Selection items
---- Item select
 - Enemy
--- Path
--- Movement
--- Path end
++- Path end
 - Units
 -- Defending
 -- Upgrade
 -- Idle
-
--Resize. Scale.
+- Menu item modification

@@ -8,6 +8,7 @@ SCG.src = {
 	wooden_fence: 'content/images/wooden_fence.png',
 	placeholder: 'content/images/placeholder.png',
 	defender_soldier: 'content/images/defender_soldier.png',
+	enemy_soldier: 'content/images/enemy_soldier.png',
 	add_soldier: 'content/images/add_soldier.png',
 }
 
@@ -45,47 +46,30 @@ $(document).ready(function(){
 		SCG.gameControls.orientationChangeEventInit();
 		SCG.GO.DefenderState.init();
 
-		var testGo = new SCG.GO.GO({
-			img : SCG.images.test,
-			position: new Vector2(200,200),
-			id : 'test',
-			size: new Vector2(20,20),
-			speed: 0.5,
-			path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
-			internalUpdate: function(){ 
-				if(this.destination == undefined)
-				{
-					// this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
-					// this.direction = this.position.direction(this.destination);	
-					this.setDead();
-				}
-			 }
-		});
+		// var testGo = new SCG.GO.GO({
+		// 	img : SCG.images.test,
+		// 	position: new Vector2(200,200),
+		// 	id : 'test',
+		// 	size: new Vector2(20,20),
+		// 	speed: 0.5,
+		// 	path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
+		// 	internalUpdate: function(){ 
+		// 		if(this.destination == undefined)
+		// 		{
+		// 			// this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
+		// 			// this.direction = this.position.direction(this.destination);	
+		// 			this.setDead();
+		// 		}
+		// 	 }
+		// });
 
-		SCG.go.push(testGo);
+		//SCG.go.push(new SCG.GO.Enemy({position: new Vector2}));
 
 		var testDefender = new SCG.GO.Defender({
 			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
 			size: new Vector2(30,30),
 		});
 
-		// var menuItems = 
-		// [
-		// 	new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
-		// 		clickCallback: function(context) { 
-		// 			console.log('ok clicked'); 
-		// 			if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-		// 			{
-		// 				context.parent.parent.upgrade();
-		// 			}
-		// 		}}),
-		// 	new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-		// ];
-
-		// var menu = new SCG.GO.Menu({size: new Vector2(100,20), position: new Vector2});
-		// menu.setItems(menuItems);
-
-		// testDefender.setMenu(menu);
 
 		SCG.go.push(testDefender);
 
@@ -111,6 +95,8 @@ SCG.draw = function(){
 	var now = new Date;
 
 	SCG.gameControls.mousestate.doClickCheck();
+
+	SCG.EnemySpawner.doWork(now);
 
 	//draw background
 	SCG.context.drawImage(SCG.images.background,0,0,SCG.battlefield.width,SCG.battlefield.height);

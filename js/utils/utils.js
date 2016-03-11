@@ -32,6 +32,10 @@ function getRandom(min, max){
 	return Math.random() * (max - min) + min;
 }
 
+function getRandomInt(min, max){
+  return Math.round(getRandom(min, max));
+}
+
 function boxIntersectsBox(a,b)
 {
   return (Math.abs(a.center.x - b.center.x) * 2 < (a.size.x + b.size.x)) &&
