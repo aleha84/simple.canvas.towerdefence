@@ -60,9 +60,11 @@ SCG.GO.EnemySoldier = function(prop)
 	this.img = SCG.images.enemy_soldier;
 	this.speed = 1;
 	this.path = SCG.GO.EnemyPaths.getRandomPath();
-	this.position = this.path[0].clone();
+	this.position = this.path.shift().clone();
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 20;
+	this.setPlaceable = true;
+	this.updatePlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
 }
 
@@ -70,10 +72,10 @@ SCG.GO.EnemySoldier.counter = 0;
 SCG.GO.EnemySoldier.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.EnemySoldier.prototype.constructor = SCG.GO.EnemySoldier;
 
-SCG.GO.EnemySoldier.prototype.getPath = function(path){
-	var newPath = [];
-	for(var i = 0; i<path.length;i++){
-		newPath.push(path[i].clone());
-	}
-	this.path = newPath;
-}
+// SCG.GO.EnemySoldier.prototype.getPath = function(path){
+// 	var newPath = [];
+// 	for(var i = 0; i<path.length;i++){
+// 		newPath.push(path[i].clone());
+// 	}
+// 	this.path = newPath;
+// }

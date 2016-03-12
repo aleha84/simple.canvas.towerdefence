@@ -22,6 +22,8 @@ SCG.GO.GO = function(prop){
 	this.mouseOver = false;
 	this.randomizeDestination = false;
 	this.randomizeDestinationRadius = new Vector2;
+	this.setPlaceable = false;
+	this.updatePlaceable = false;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
