@@ -22,12 +22,12 @@ SCG.GO.GO = function(prop){
 	this.mouseOver = false;
 	this.randomizeDestination = false;
 	this.randomizeDestinationRadius = new Vector2;
-	this.setPlaceable = false;
 	this.updatePlaceable = false;
+	this.hasPlaceable = false;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
-		throw 'SCG2.GO.Defender -> size is undefined';
+		throw 'SCG2.GO.GO -> size is undefined';
 	}
 
 	if(prop!=undefined)
@@ -49,6 +49,10 @@ SCG.GO.GO.prototype = {
 
 	setDead : function() {
 		this.alive = false;
+		if(this.hasPlaceable) {
+			SCG.Placeable.remove(this);
+		}
+
 		if(this instanceof SCG.GO.EnemySoldier){
 			SCG.EnemySpawner.enemySoldiers.currentCount--;	
 		}
@@ -91,15 +95,20 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
-		this.mouseOver = false;
-
-		this.internalPreUpdate();
-
 		// if outside - then remove
 		if(this.position.x < 0 || this.position.y < 0 || this.position.x > SCG.battlefield.default.width || this.position.y > SCG.battlefield.default.height)
 		{
 			this.setDead();
+			return false;
 		}
+
+		if(this.updatePlaceable){
+			SCG.Placeable.remove(this);
+		}
+
+		this.mouseOver = false;
+
+		this.internalPreUpdate();
 
 		if(this.destination)
 		{
@@ -127,6 +136,10 @@ SCG.GO.GO.prototype = {
 		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
 
 		this.internalUpdate(now);
+
+		if(this.updatePlaceable){
+			SCG.Placeable.set(this);
+		}
 	},
 
 	internalPreUpdate: function(){

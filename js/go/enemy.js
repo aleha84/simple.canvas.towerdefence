@@ -56,6 +56,7 @@ SCG.GO.EnemySoldier = function(prop)
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
 	SCG.GO.GO.call(this,prop);
+
 	//overriding defaults and props
 	this.img = SCG.images.enemy_soldier;
 	this.speed = 1;
@@ -63,9 +64,10 @@ SCG.GO.EnemySoldier = function(prop)
 	this.position = this.path.shift().clone();
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 20;
-	this.setPlaceable = true;
 	this.updatePlaceable = true;
+	this.hasPlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
+	SCG.Placeable.set(this);
 }
 
 SCG.GO.EnemySoldier.counter = 0;

@@ -68,15 +68,14 @@ SCG.GO.Defender = function(prop)
 	this.state = undefined;
 	this.light = undefined;
 	this.menu = undefined;
-
+	this.updatePlaceable = false;
+	this.hasPlaceable = true;
 	this.shouldRenderMenu = false;
 
 	this.defenderSoldiers = [];
 
 	this.setState();
-
-	this.setPlaceable = true;
-	this.updatePlaceable = false;
+	SCG.Placeable.set(this);
 }
 
 SCG.GO.Defender.counter = 0;
