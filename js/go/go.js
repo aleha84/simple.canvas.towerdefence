@@ -24,6 +24,7 @@ SCG.GO.GO = function(prop){
 	this.randomizeDestinationRadius = new Vector2;
 	this.updatePlaceable = false;
 	this.hasPlaceable = false;
+	this.setDeadOnDestinationComplete = false;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
@@ -55,6 +56,7 @@ SCG.GO.GO.prototype = {
 
 		if(this instanceof SCG.GO.EnemySoldier){
 			SCG.EnemySpawner.enemySoldiers.currentCount--;	
+			delete SCG.Placeable.enemyUnits[this.id];
 		}
 	},
 
@@ -125,6 +127,10 @@ SCG.GO.GO.prototype = {
 			if(this.path.length > 0)
 			{
 				this.setDestination(this.path.shift());
+			}
+
+			if(this.setDeadOnDestinationComplete) {
+				this.setDead();
 			}
 		}
 		

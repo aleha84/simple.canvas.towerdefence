@@ -68,6 +68,7 @@ SCG.GO.EnemySoldier = function(prop)
 	this.hasPlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
 	SCG.Placeable.set(this);
+	SCG.Placeable.enemyUnits[this.id] = this;
 }
 
 SCG.GO.EnemySoldier.counter = 0;

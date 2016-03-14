@@ -1,5 +1,7 @@
 SCG.Placeable = {
 	battlefield : {},
+	playerUnits: {},
+	enemyUnits: {},
 	set: function(go){
 		var topLeft = new Vector2(Math.round(go.position.x - go.size.x), Math.round(go.position.y - go.size.y));
 		for(var x = 0; x<go.size.x;x++){

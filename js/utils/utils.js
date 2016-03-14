@@ -321,3 +321,20 @@ function getDegreeToVectorUp(p1, p2){
   var v1 = p2.substract(p1,true);
   return  Math.acos((v1.mulVector(up))/(v1.module()*up.module()));
 }
+
+function doWorkByTimer(timer, now){
+  if(SCG.gameLogics.isPaused){
+    timer.lastTimeWork = now;
+    timer.delta = 0;
+    return;
+  }
+
+  timer.delta = now - timer.lastTimeWork;
+  timer.currentDelay -= timer.delta;
+  if(timer.currentDelay < 0){
+    timer.currentDelay = timer.originDelay;
+    timer.doWorkInternal.call(timer.context);  
+  }
+  
+  timer.lastTimeWork = now;
+}

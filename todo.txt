@@ -6,3 +6,5 @@
 -- Upgrade
 -- Idle
 - Menu item modification
+- shooting
+- collision detection
