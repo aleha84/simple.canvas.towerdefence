@@ -20,7 +20,7 @@ SCG.EnemySpawner = {
 		currentSpawnDelay : 1000,
 		originSpawnDelay : 1000,
 		currentCount: 0,
-		maxCount : 3
+		maxCount : 30
 	},
 	lastTimeWork : new Date,
 	delta: 0,
@@ -67,6 +67,7 @@ SCG.GO.EnemySoldier = function(prop)
 	this.updatePlaceable = true;
 	this.hasPlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
+	this.side = 2;
 	SCG.Placeable.set(this);
 	SCG.Placeable.enemyUnits[this.id] = this;
 }

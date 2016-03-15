@@ -312,7 +312,9 @@ SCG.gameControls = {
 				else{
 					SCG.gameLogics.isPaused = !SCG.gameLogics.isPaused;	
 				}
-				
+				break;
+			case 80: //show placeable
+				SCG.Placeable.show = !SCG.Placeable.show;
 				break;
 			default:
 				break;

@@ -10,6 +10,7 @@ SCG.src = {
 	defender_soldier: 'content/images/defender_soldier.png',
 	enemy_soldier: 'content/images/enemy_soldier.png',
 	add_soldier: 'content/images/add_soldier.png',
+	explosion_sheet: 'content/images/explosionSheet.png'
 }
 
 SCG.images = {
@@ -121,6 +122,10 @@ SCG.draw = function(){
 		if(!SCG.nonplayableGo[ni].alive){
 			var deleted = SCG.nonplayableGo.splice(ni,1);
 		}
+	}
+
+	if(SCG.Placeable.show){
+		SCG.Placeable.render();
 	}
 
 	if(SCG.gameLogics.isPausedStep)

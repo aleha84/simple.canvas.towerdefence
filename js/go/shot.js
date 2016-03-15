@@ -37,6 +37,29 @@ SCG.GO.Shot.prototype.internalRender = function(){
 	SCG.context.stroke();
 }
 
-SCG.GO.Shot.prototype.internalUpdate = function(){
-	
+SCG.GO.Shot.prototype.internalPreUpdate = function(){
+	if(!this.alive){
+		return false;
+	}
+
+	for(var i = 0;i < this.speed; i++){
+		var step = this.position.add(this.direction.mul(i), true);
+		var index = Math.round(step.x) + 'x' + Math.round(step.y);
+		if(SCG.Placeable.battlefield[index] != undefined){
+			var hitted = false;
+			for (var unitId in SCG.Placeable.battlefield[index]) {	
+				if (SCG.Placeable.battlefield[index].hasOwnProperty(unitId)) {
+					var unit = SCG.Placeable.battlefield[index][unitId];
+					if(unit.side != this.side){
+						unit.hitted();
+						hitted = true;
+					}
+				}
+			}
+			if(hitted){
+				this.setDead();
+				break;
+			}
+		}
+	}
 }

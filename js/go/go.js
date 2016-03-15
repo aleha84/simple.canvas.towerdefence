@@ -48,6 +48,10 @@ SCG.GO.GO = function(prop){
 SCG.GO.GO.prototype = {
 	constructor: SCG.GO.GO,
 
+	hitted: function() {
+		console.log('bang! ' + this.id);
+	},
+
 	setDead : function() {
 		this.alive = false;
 		if(this.hasPlaceable) {
@@ -112,6 +116,11 @@ SCG.GO.GO.prototype = {
 
 		this.internalPreUpdate();
 
+		if(!this.alive)
+		{
+			return false;
+		}
+
 		if(this.destination)
 		{
 			if(this.position.distance(this.destination) <= this.speed){
@@ -131,6 +140,7 @@ SCG.GO.GO.prototype = {
 
 			if(this.setDeadOnDestinationComplete) {
 				this.setDead();
+				return false;
 			}
 		}
 		
@@ -142,6 +152,11 @@ SCG.GO.GO.prototype = {
 		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
 
 		this.internalUpdate(now);
+
+		if(!this.alive)
+		{
+			return false;
+		}
 
 		if(this.updatePlaceable){
 			SCG.Placeable.set(this);

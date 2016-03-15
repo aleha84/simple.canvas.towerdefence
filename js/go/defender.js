@@ -71,7 +71,7 @@ SCG.GO.Defender = function(prop)
 	this.updatePlaceable = false;
 	this.hasPlaceable = true;
 	this.shouldRenderMenu = false;
-
+	this.side = 1;
 	this.defenderSoldiers = [];
 
 	this.setState();
@@ -81,8 +81,8 @@ SCG.GO.Defender = function(prop)
 	this.fireTimer = {
 		lastTimeWork: new Date,
 		delta : 0,
-		currentDelay: 1000,
-		originDelay: 1000,
+		currentDelay: 300,
+		originDelay: 300,
 		doWorkInternal : this.fire,
 		context: this
 	}
@@ -96,9 +96,9 @@ SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
 
 SCG.GO.Defender.prototype.fire = function(){
 	SCG.go.push(new SCG.GO.Shot({
-		side: 1,
+		side: this.side,
 		position: this.position.clone(),
-		destination: new Vector2(SCG.battlefield.default.width/2, SCG.battlefield.default.height/2)
+		destination: new Vector2(500,50)
 	}));
 }
 
