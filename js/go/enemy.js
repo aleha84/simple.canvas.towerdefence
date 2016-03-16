@@ -10,9 +10,27 @@ SCG.GO.EnemyPaths = {
 		}
 		return newPath;
 	},
+	render: function(){
+		for(var p = 0; p < this.paths.length; p++)
+		{
+			SCG.context.beginPath();
+			for(var pi = 0; pi < this.paths[p].length-1; pi++){
+				SCG.context.moveTo(this.paths[p][pi].x, this.paths[p][pi].y);
+				SCG.context.lineTo(this.paths[p][pi+1].x, this.paths[p][pi+1].y);
+			}
+			SCG.context.lineWidth = 2;
+			SCG.context.strokeStyle = 'blue';
+			SCG.context.stroke();
+		}
+	},
 	paths: [
-		[new Vector2(500,50), new Vector2(400,100), new Vector2(300,50), new Vector2(200,120), new Vector2(100,60), new Vector2(-100,50)]
-	]
+		//[new Vector2(500,50), new Vector2(400,100), new Vector2(300,50), new Vector2(200,120), new Vector2(100,60), new Vector2(-100,50)]
+		[new Vector2(500,20), new Vector2(400,50), new Vector2(350,100), new Vector2(300,150), new Vector2(250,190), new Vector2(120,240), new Vector2(80,190), new Vector2(-20,150)],
+		[new Vector2(500,270), new Vector2(380,240), new Vector2(340,200), new Vector2(300,150), new Vector2(240,100), new Vector2(125,60), new Vector2(80,100), new Vector2(-20,150)],
+		[new Vector2(500,150), new Vector2(420,140), new Vector2(300,40), new Vector2(220,90), new Vector2(160,150), new Vector2(80,190), new Vector2(-20,150)],
+		[new Vector2(500,150), new Vector2(420,140), new Vector2(285,240), new Vector2(190,200), new Vector2(160,150), new Vector2(80,100), new Vector2(-20,150)]
+	],
+	show: false
 }
 
 SCG.EnemySpawner = {
@@ -51,7 +69,7 @@ SCG.GO.EnemySoldier = function(prop)
 {
 	if(prop.position === undefined)
 	{
-		throw 'SCG2.GO.EnemySoldier -> position is undefined';
+		throw 'SCG.GO.EnemySoldier -> position is undefined';
 	}
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
@@ -63,7 +81,7 @@ SCG.GO.EnemySoldier = function(prop)
 	this.path = SCG.GO.EnemyPaths.getRandomPath();
 	this.position = this.path.shift().clone();
 	this.randomizeDestination = true;
-	this.randomizeDestinationRadius = 20;
+	this.randomizeDestinationRadius = 15;
 	this.updatePlaceable = true;
 	this.hasPlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);

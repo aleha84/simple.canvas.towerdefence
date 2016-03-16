@@ -58,6 +58,7 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 			}
 			if(hitted){
 				this.setDead();
+				SCG.Animations.createObject(SCG.Animations.types.smallExplosion, step.clone());
 				break;
 			}
 		}

@@ -1,5 +1,5 @@
 SCG.src = {
-	background: 'content/images/background.jpg',
+	background: 'content/images/background.png',
 	test: 'content/images/test.jpg',
 	emptyDefencePoint: 'content/images/emptyDefencePoint.png',
 	cross: 'content/images/cross.png',
@@ -66,13 +66,13 @@ $(document).ready(function(){
 
 		//SCG.go.push(new SCG.GO.Enemy({position: new Vector2}));
 
-		var testDefender = new SCG.GO.Defender({
-			position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-			size: new Vector2(30,30),
-		});
+		// var testDefender = new SCG.GO.Defender({
+		// 	position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
+		// 	size: new Vector2(30,30),
+		// });
 
 
-		SCG.go.push(testDefender);
+		// SCG.go.push(testDefender);
 
 		// for(var i = 0; i< 10; i++)
 		// {
@@ -126,6 +126,9 @@ SCG.draw = function(){
 
 	if(SCG.Placeable.show){
 		SCG.Placeable.render();
+	}
+	if(SCG.GO.EnemyPaths.show){
+		SCG.GO.EnemyPaths.render();
 	}
 
 	if(SCG.gameLogics.isPausedStep)
