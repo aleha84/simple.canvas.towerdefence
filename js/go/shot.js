@@ -43,11 +43,12 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 	}
 
 	var units = this.side == 1 ? SCG.Placeable.enemyUnits : SCG.Placeable.playerUnits;
+	var segment = { begin: this.position.clone(), end: this.position.add(this.direction.mul(this.speed), true), lenght: this.speed};
 	for(var unitId in units) {
 		if(units.hasOwnProperty(unitId)){
 			var unit = units[unitId];
-			var segment = { begin: this.position.clone(), end: this.position.add(this.direction.mul(this.speed), true), lenght: this.speed};
-			if(this.position.direction(unit.position < (this.speed*3)) 
+			
+			if(this.position.distance(unit.position) < (this.speed*3) 
 				&& segmentIntersectBox(segment , unit.box))
 			{
 				var hitPoint = segment.begin;

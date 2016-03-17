@@ -149,8 +149,8 @@ SCG.GO.GO.prototype = {
 		this.renderPosition = new Vector2(this.position.x * SCG.gameControls.scale.times, this.position.y * SCG.gameControls.scale.times);
 
 		this.box = new Box(new Vector2(this.position.x - this.size.x/2,this.position.y - this.size.y/2), this.size);
-		this.boundingBox = new Box(new Vector2(this.renderPosition.x - this.renderSize.x/2, this.renderPosition.y - this.renderSize.y/2), this.renderSize);
-		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
+		//this.boundingBox = new Box(new Vector2(this.renderPosition.x - this.renderSize.x/2, this.renderPosition.y - this.renderSize.y/2), this.renderSize);
+		this.mouseOver = this.box.isPointInside(SCG.gameControls.mousestate.position.division(SCG.gameControls.scale.times));
 
 		this.internalUpdate(now);
 
@@ -188,10 +188,13 @@ SCG.GO.GO.prototype = {
 	},
 
 	renderSelectBox: function(){
-		if(this.boundingBox === undefined)
-		{
-			return;
-		}
+		// if(this.boundingBox === undefined)
+		// {
+		// 	return;
+		// }
+
+		this.boundingBox = new Box(new Vector2(this.renderPosition.x - this.renderSize.x/2, this.renderPosition.y - this.renderSize.y/2), this.renderSize);
+
 		if(this.selectBoxColor === undefined)
 		{
 			this.selectBoxColor = {max:255, min: 100, current: 255, direction:1, step: 1, colorPattern: 'rgb({0},0,0)'};

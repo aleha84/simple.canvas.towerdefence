@@ -7,43 +7,45 @@ function Vector2(x,y){
 	}
 	this.x = x;
 	this.y = y;
+}
 
-	this.distance = function(to){
+Vector2.prototype = {
+	distance : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return undefined;
 		}
 
 		return new Vector2(to.x-this.x,to.y - this.y).module();
-	}
+	},
 
-	this.directionNonNormal = function(to){
+	directionNonNormal : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return new Vector2()
 		}
 
 		return new Vector2(to.x-this.x,to.y - this.y);
-	}
+	},
 
-	this.direction = function(to){
+	direction : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return new Vector2()
 		}
 
 		return new Vector2(to.x-this.x,to.y - this.y).normalize();
-	}
+	},
 
-	this.normalize = function(){
+	normalize: function(){
 		var module = this.module();
 		this.x /= module;
 		this.y /= module;
 		return this;
-	}
+	},
 
-	this.module = function(){
+	module : function(){
 		return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2));
-	}
+	},
 
-	this.add = function(summand, outer){
+	add : function(summand, outer){
 		if(outer === undefined)
 		{
 			outer = false;
@@ -58,9 +60,9 @@ function Vector2(x,y){
 			}
 			
 		}
-	}
+	},
 
-	this.substract = function(subtrahend,outer)
+	substract : function(subtrahend,outer)
 	{
 		if(outer === undefined)
 		{
@@ -76,26 +78,30 @@ function Vector2(x,y){
 			}			
 		}
 		return new Vector2;
-	}
+	},
 
-	this.mul = function(coef){
+	mul : function(coef){
 		return new Vector2(this.x*coef,this.y*coef);
-	}
+	},
 
-	this.dot = function(to)
+	division : function(coef){
+		return new Vector2(this.x/coef,this.y/coef);
+	},
+
+	dot : function(to)
 	{
 		return this.mulVector(to);
-	}
+	},
 
-	this.mulVector = function(to){
+	mulVector : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return 0;
 		}
 
 		return this.x*to.x + this.y*to.y;
-	}
+	},
 
-	this.rotate = function(angle, inRad, isSelf){
+	rotate: function(angle, inRad, isSelf){
 		if(inRad === undefined)
 		{
 			inRad = false;
@@ -116,22 +122,22 @@ function Vector2(x,y){
 		else{
 			return result;
 		}
-	}
+	},
 
-	this.clone = function(){
+	clone : function(){
 		return new Vector2(this.x,this.y);
-	}
+	},
 
-	this.equal = function(to){
+	equal : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return false;
 		}
 
 		return this.x == to.x && this.y == to.y;
-	}
+	},
 
-	this.toString = function(){
-		return String.format("x: {0}, y:{1}", this.x,this.y);
+	toString : function(){
+		return 'x: ' + this.x + ', y: ' + this.y;
 	}
 }
 
