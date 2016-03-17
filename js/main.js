@@ -66,6 +66,10 @@ $(document).ready(function(){
 
 		//SCG.go.push(new SCG.GO.Enemy({position: new Vector2}));
 
+		for(var i=0;i<SCG.GO.DefenderState.positions.length;i++){
+			SCG.go.push(new SCG.GO.Defender({position: SCG.GO.DefenderState.positions[i]}));
+		}
+
 		// var testDefender = new SCG.GO.Defender({
 		// 	position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
 		// 	size: new Vector2(30,30),

@@ -148,6 +148,7 @@ SCG.GO.GO.prototype = {
 		this.renderSize = this.size.mul(SCG.gameControls.scale.times);
 		this.renderPosition = new Vector2(this.position.x * SCG.gameControls.scale.times, this.position.y * SCG.gameControls.scale.times);
 
+		this.box = new Box(new Vector2(this.position.x - this.size.x/2,this.position.y - this.size.y/2), this.size);
 		this.boundingBox = new Box(new Vector2(this.renderPosition.x - this.renderSize.x/2, this.renderPosition.y - this.renderSize.y/2), this.renderSize);
 		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
 

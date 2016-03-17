@@ -42,25 +42,58 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 		return false;
 	}
 
-	for(var i = 0;i < this.speed; i++){
-		var step = this.position.add(this.direction.mul(i), true);
-		var index = Math.round(step.x) + 'x' + Math.round(step.y);
-		if(SCG.Placeable.battlefield[index] != undefined){
-			var hitted = false;
-			for (var unitId in SCG.Placeable.battlefield[index]) {	
-				if (SCG.Placeable.battlefield[index].hasOwnProperty(unitId)) {
-					var unit = SCG.Placeable.battlefield[index][unitId];
-					if(unit.side != this.side){
-						unit.hitted();
-						hitted = true;
+	var units = this.side == 1 ? SCG.Placeable.enemyUnits : SCG.Placeable.playerUnits;
+	for(var unitId in units) {
+		if(units.hasOwnProperty(unitId)){
+			var unit = units[unitId];
+			var segment = { begin: this.position.clone(), end: this.position.add(this.direction.mul(this.speed), true), lenght: this.speed};
+			if(this.position.direction(unit.position < (this.speed*3)) 
+				&& segmentIntersectBox(segment , unit.box))
+			{
+				var hitPoint = segment.begin;
+				for(var ic = 5;ic>0; ic--){
+					if(unit.box.isPointInside(segment.begin)){
+						hitPoint = segment.begin;
+						break;
+					}
+					else if(unit.box.isPointInside(segment.end)){
+						hitPoint = segment.end;
+						break;
+					}
+					else{
+						var nLength = segment.lenght/2;
+						var middle = segment.begin.add(this.direction.mul(nLength),true);
+						segment = segment.begin.distance(unit.position) <= segment.end.distance(unit.position) 
+							?  { begin : segment.begin, end : middle, lenght : nLength } 
+							: { begin : middle, end : segment.end, lenght : nLength };
+						hitPoint = segment.begin;
 					}
 				}
-			}
-			if(hitted){
 				this.setDead();
-				SCG.Animations.createObject(SCG.Animations.types.smallExplosion, step.clone());
-				break;
+				SCG.Animations.createObject(SCG.Animations.types.smallExplosion, hitPoint);
 			}
 		}
 	}
+
+	// for(var i = 0;i < this.speed; i++){
+	// 	var step = this.position.add(this.direction.mul(i), true);
+	// 	var index = Math.round(step.x) + 'x' + Math.round(step.y);
+	// 	if(SCG.Placeable.battlefield[index] != undefined){
+	// 		var hitted = false;
+	// 		for (var unitId in SCG.Placeable.battlefield[index]) {	
+	// 			if (SCG.Placeable.battlefield[index].hasOwnProperty(unitId)) {
+	// 				var unit = SCG.Placeable.battlefield[index][unitId];
+	// 				if(unit.side != this.side){
+	// 					unit.hitted();
+	// 					hitted = true;
+	// 				}
+	// 			}
+	// 		}
+	// 		if(hitted){
+	// 			this.setDead();
+	// 			SCG.Animations.createObject(SCG.Animations.types.smallExplosion, step.clone());
+	// 			break;
+	// 		}
+	// 	}
+	// }
 }
