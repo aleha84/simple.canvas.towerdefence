@@ -20,10 +20,15 @@ SCG.GO.GO = function(prop){
 	this.destination = undefined;
 	this.path = [];
 	this.mouseOver = false;
+	this.randomizeDestination = false;
+	this.randomizeDestinationRadius = new Vector2;
+	this.updatePlaceable = false;
+	this.hasPlaceable = false;
+	this.setDeadOnDestinationComplete = false;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
-		throw 'SCG2.GO.Defender -> size is undefined';
+		throw 'SCG2.GO.GO -> size is undefined';
 	}
 
 	if(prop!=undefined)
@@ -43,8 +48,20 @@ SCG.GO.GO = function(prop){
 SCG.GO.GO.prototype = {
 	constructor: SCG.GO.GO,
 
+	hitted: function() {
+		console.log('bang! ' + this.id);
+	},
+
 	setDead : function() {
 		this.alive = false;
+		if(this.hasPlaceable) {
+			SCG.Placeable.remove(this);
+		}
+
+		if(this instanceof SCG.GO.EnemySoldier){
+			SCG.EnemySpawner.enemySoldiers.currentCount--;	
+			delete SCG.Placeable.enemyUnits[this.id];
+		}
 	},
 
 	isAlive : function(){ 
@@ -84,9 +101,25 @@ SCG.GO.GO.prototype = {
 			return false;
 		}
 
+		// if outside - then remove
+		if(this.position.x < 0 || this.position.y < 0 || this.position.x > SCG.battlefield.default.width || this.position.y > SCG.battlefield.default.height)
+		{
+			this.setDead();
+			return false;
+		}
+
+		if(this.updatePlaceable){
+			SCG.Placeable.remove(this);
+		}
+
 		this.mouseOver = false;
 
 		this.internalPreUpdate();
+
+		if(!this.alive)
+		{
+			return false;
+		}
 
 		if(this.destination)
 		{
@@ -104,6 +137,11 @@ SCG.GO.GO.prototype = {
 			{
 				this.setDestination(this.path.shift());
 			}
+
+			if(this.setDeadOnDestinationComplete) {
+				this.setDead();
+				return false;
+			}
 		}
 		
 		//this.renderRadius = this.radius * SCG.gameControls.scale.times;
@@ -114,6 +152,15 @@ SCG.GO.GO.prototype = {
 		this.mouseOver = this.boundingBox.isPointInside(SCG.gameControls.mousestate.position);
 
 		this.internalUpdate(now);
+
+		if(!this.alive)
+		{
+			return false;
+		}
+
+		if(this.updatePlaceable){
+			SCG.Placeable.set(this);
+		}
 	},
 
 	internalPreUpdate: function(){
@@ -127,6 +174,9 @@ SCG.GO.GO.prototype = {
 	setDestination: function(newDestination)
 	{
 		if(newDestination !== undefined && newDestination instanceof Vector2){
+			if(this.randomizeDestination){
+				newDestination.add(new Vector2(getRandom(-this.randomizeDestinationRadius, this.randomizeDestinationRadius), getRandom(-this.randomizeDestinationRadius, this.randomizeDestinationRadius)));
+			}
 			this.destination = newDestination;
 			this.direction = this.position.direction(this.destination);
 		}

@@ -59,7 +59,7 @@ SCG.GO.Defender = function(prop)
 {
 	if(prop.position === undefined)
 	{
-		throw 'SCG2.GO.Defender -> position is undefined';
+		throw 'SCG.GO.Defender -> position is undefined';
 	}
 
 	SCG.GO.GO.call(this,prop);
@@ -68,17 +68,39 @@ SCG.GO.Defender = function(prop)
 	this.state = undefined;
 	this.light = undefined;
 	this.menu = undefined;
-
+	this.updatePlaceable = false;
+	this.hasPlaceable = true;
 	this.shouldRenderMenu = false;
-
+	this.side = 1;
 	this.defenderSoldiers = [];
 
 	this.setState();
+	SCG.Placeable.set(this);
+	SCG.Placeable.playerUnits[this.id] = this;
+
+	this.fireTimer = {
+		lastTimeWork: new Date,
+		delta : 0,
+		currentDelay: 300,
+		originDelay: 300,
+		doWorkInternal : this.fire,
+		context: this
+	}
+
+
 }
 
 SCG.GO.Defender.counter = 0;
 SCG.GO.Defender.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
+
+SCG.GO.Defender.prototype.fire = function(){
+	SCG.go.push(new SCG.GO.Shot({
+		side: this.side,
+		position: this.position.clone(),
+		destination: new Vector2(500,50)
+	}));
+}
 
 SCG.GO.Defender.prototype.setMenu = function(menu)
 {
@@ -188,4 +210,6 @@ SCG.GO.Defender.prototype.internalUpdate = function(now){
 	{
 		this.defenderSoldiers[i].update();
 	}
+
+	doWorkByTimer(this.fireTimer, now);
 }

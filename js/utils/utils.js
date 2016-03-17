@@ -32,6 +32,10 @@ function getRandom(min, max){
 	return Math.random() * (max - min) + min;
 }
 
+function getRandomInt(min, max){
+  return Math.round(getRandom(min, max));
+}
+
 function boxIntersectsBox(a,b)
 {
   return (Math.abs(a.center.x - b.center.x) * 2 < (a.size.x + b.size.x)) &&
@@ -276,6 +280,26 @@ function isBetween(x, begin, end)
 
 }
 
+function isEmpty(obj) {
+
+    // null and undefined are "empty"
+    if (obj == null) return true;
+
+    // Assume if it has a length property with a non-zero value
+    // that that property is correct.
+    if (obj.length > 0)    return false;
+    if (obj.length === 0)  return true;
+
+    // Otherwise, does it have any properties of its own?
+    // Note that this doesn't handle
+    // toString and valueOf enumeration bugs in IE < 9
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) return false;
+    }
+
+    return true;
+}
+
 function sqr(x) { return x * x }
 
 function dist2(v, w) { return sqr(v.x - w.x) + sqr(v.y - w.y) }
@@ -296,4 +320,21 @@ function getDegreeToVectorUp(p1, p2){
   var up = Vector2.up();
   var v1 = p2.substract(p1,true);
   return  Math.acos((v1.mulVector(up))/(v1.module()*up.module()));
+}
+
+function doWorkByTimer(timer, now){
+  if(SCG.gameLogics.isPaused){
+    timer.lastTimeWork = now;
+    timer.delta = 0;
+    return;
+  }
+
+  timer.delta = now - timer.lastTimeWork;
+  timer.currentDelay -= timer.delta;
+  if(timer.currentDelay < 0){
+    timer.currentDelay = timer.originDelay;
+    timer.doWorkInternal.call(timer.context);  
+  }
+  
+  timer.lastTimeWork = now;
 }

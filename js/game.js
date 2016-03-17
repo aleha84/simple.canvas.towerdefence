@@ -312,7 +312,12 @@ SCG.gameControls = {
 				else{
 					SCG.gameLogics.isPaused = !SCG.gameLogics.isPaused;	
 				}
-				
+				break;
+			case 69:
+				SCG.GO.EnemyPaths.show = !SCG.GO.EnemyPaths.show;
+				break;
+			case 80: //show placeable
+				SCG.Placeable.show = !SCG.Placeable.show;
 				break;
 			default:
 				break;
