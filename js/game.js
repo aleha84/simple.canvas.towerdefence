@@ -67,7 +67,7 @@ SCG.gameControls = {
 			SCG.gameControls.mousestate.delta = new Vector2;
 		},
 		toString: function(){
-			return String.format('position: {0}<br/>leftButtonDown: {1}', this.position.toString(), this.leftButtonDown);
+			return 'position: '+this.position.toString()+'<br/>leftButtonDown: ' + this.leftButtonDown;
 		},
 		doClickCheck: function() {
 			if(this.leftButtonDown)
