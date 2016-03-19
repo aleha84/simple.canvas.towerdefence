@@ -6,3 +6,5 @@
 - defender soldiers types
 - damage
 -- damage indicator
+- gameplay
+-- optimizations
