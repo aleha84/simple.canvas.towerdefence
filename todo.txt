@@ -1,10 +1,8 @@
--- Selection Animation
-- Enemy
-+- Path end
 - Units
 -- Defending
 -- Upgrade
 -- Idle
 - Menu item modification
-- shooting
-- collision detection
+- defender soldiers types
+- damage
+-- damage indicator

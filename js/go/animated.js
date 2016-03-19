@@ -1,6 +1,12 @@
 SCG.Animations = {
-	types: {
-		smallExplosion: 1
+	tinyExplosion: {
+		totalFrameCount: 81,
+		framesInRow: 9,
+		framesRowsCount: 9,
+		frameChangeDelay: 6,
+		destinationFrameSize: new Vector2(4,4),
+		sourceFrameSize: new Vector2(100,100),
+		explosionImageType: 1
 	},
 	smallExplosion: {
 		totalFrameCount: 81,
@@ -12,14 +18,14 @@ SCG.Animations = {
 		explosionImageType: 1
 	},
 	createObject: function(type, position){
-		var obj = undefined;
-		switch(type){
-			case this.types.smallExplosion:
-				obj = new SCG.GO.Animated($.extend({}, this.smallExplosion, {img : SCG.images.explosion_sheet, position : position }));
-				break
-			default: 
-				break;
-		}
+		var obj = new SCG.GO.Animated($.extend({}, this[type], {img : SCG.images.explosion_sheet, position : position }));
+		// switch(type){
+		// 	case this.types.smallExplosion:
+		// 		obj = new SCG.GO.Animated($.extend({}, this.smallExplosion, {img : SCG.images.explosion_sheet, position : position }));
+		// 		break
+		// 	default: 
+		// 		break;
+		// }
 
 		if(obj!= undefined){
 			SCG.go.unshift(obj);

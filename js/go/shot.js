@@ -14,7 +14,7 @@ SCG.GO.Shot = function(prop)
 	if(prop.size == undefined){ prop.size = new Vector2(1,1); }
 	if(prop.speed == undefined){ prop.speed = 10; }
 	if(prop.strokeColor === undefined) { this.strokeColor = '#ff0000';}
-	if(prop.lineWidth  === undefined) { this.lineWidth  = 3;}
+	if(prop.lineWidth  === undefined) { this.lineWidth  = 2;}
 	SCG.GO.GO.call(this,prop);
 
 	//overriding defaults and props
@@ -26,6 +26,24 @@ SCG.GO.Shot = function(prop)
 SCG.GO.Shot.counter = 0;
 SCG.GO.Shot.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.Shot.prototype.constructor = SCG.GO.Shot;
+
+SCG.GO.Shot.ShotTypes = {
+	simple: {
+		speed: 10,
+		explosionType: 'tinyExplosion'
+	},
+	sniper: {
+		speed: 100,
+		explosionType: 'tinyExplosion'
+	},
+	getShot: function(type, side, position, destination){
+		SCG.go.push(new SCG.GO.Shot($.extend({},{
+			side: side,
+			position: position,
+			destination: destination
+		}, SCG.GO.Shot.ShotTypes[type])));
+	}
+}
 
 SCG.GO.Shot.prototype.internalRender = function(){
 	SCG.context.beginPath();
@@ -71,7 +89,7 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 					}
 				}
 				this.setDead();
-				SCG.Animations.createObject(SCG.Animations.types.smallExplosion, hitPoint);
+				SCG.Animations.createObject(this.explosionType, hitPoint);
 			}
 		}
 	}
