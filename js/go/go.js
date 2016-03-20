@@ -25,6 +25,9 @@ SCG.GO.GO = function(prop){
 	this.updatePlaceable = false;
 	this.hasPlaceable = false;
 	this.setDeadOnDestinationComplete = false;
+	this.health = 1;
+	this.maxHealth = 1;
+	this.isDrawingHealthBar = false;
 
 	if(prop.size == undefined || prop.size.equal(new Vector2))
 	{
@@ -42,16 +45,24 @@ SCG.GO.GO = function(prop){
 	// if(this.size.equal(new Vector2)){
 	// 	this.size = new Vector2(this.radius,this.radius);
 	// }
+	this.health = this.maxHealth;
 	this.creationTime = new Date;
 }
 
 SCG.GO.GO.prototype = {
 	constructor: SCG.GO.GO,
 
-	hitted: function() {
-		console.log('bang! ' + this.id);
+	hitted: function(damage) {
+		//console.log('bang! ' + this.id);
+		this.health -= damage;
+		if(this.health <= 0) {
+			this.beforeDead();
+			this.setDead();
+		}
 	},
+	beforeDead: function(){
 
+	},
 	setDead : function() {
 		this.alive = false;
 		if(this.hasPlaceable) {
@@ -85,6 +96,9 @@ SCG.GO.GO.prototype = {
 		}
 
 		this.internalRender();
+		if(this.isDrawingHealthBar){
+			this.drawHealthBar();
+		}
 	},
 
 	internalPreRender: function(){
@@ -114,7 +128,7 @@ SCG.GO.GO.prototype = {
 
 		this.mouseOver = false;
 
-		this.internalPreUpdate();
+		this.internalPreUpdate(now);
 
 		if(!this.alive)
 		{
@@ -211,5 +225,28 @@ SCG.GO.GO.prototype = {
 			this.selectBoxColor.direction *=-1;
 		}
 		this.selectBoxColor.current+=(this.selectBoxColor.step*this.selectBoxColor.direction);
+	},
+
+	drawHealthBar: function(){
+		var healthRate = this.health / this.maxHealth;
+		var healthBarLength = healthRate * this.renderSize.x;
+		SCG.context.beginPath();
+		SCG.context.lineWidth = 3;
+		var healthBarColor = 'green';
+		if(healthRate >= 0.5 && healthRate < 0.75){
+			healthBarColor = 'yellow';
+		}
+		else if(healthRate >= 0.25 && healthRate < 0.5){
+			healthBarColor = 'orange';
+		}
+		else if(healthRate < 0.25){
+			healthBarColor = 'red';
+		}
+
+		SCG.context.strokeStyle = healthBarColor;
+		var topLeft = this.renderPosition.substract(this.renderSize.division(2), true);
+	    SCG.context.moveTo(topLeft.x, topLeft.y);
+	    SCG.context.lineTo(topLeft.x + healthBarLength, topLeft.y);
+		SCG.context.stroke();	
 	}
 }

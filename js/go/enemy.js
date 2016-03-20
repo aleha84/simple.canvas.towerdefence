@@ -76,6 +76,7 @@ SCG.GO.EnemySoldier = function(prop)
 	}
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
+	if(prop.maxHealth == undefined){ prop.maxHealth = 5; }
 	SCG.GO.GO.call(this,prop);
 
 	//overriding defaults and props
@@ -87,10 +88,16 @@ SCG.GO.EnemySoldier = function(prop)
 	this.hasPlaceable = true;
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
 	this.side = 2;
-	SCG.Placeable.set(this);
-	SCG.Placeable.enemyUnits[this.id] = this;
+	this.isDrawingHealthBar = true;
+
+	// SCG.Placeable.set(this);
+	 SCG.Placeable.enemyUnits[this.id] = this;
 }
 
 SCG.GO.EnemySoldier.counter = 0;
 SCG.GO.EnemySoldier.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.EnemySoldier.prototype.constructor = SCG.GO.EnemySoldier;
+
+SCG.GO.EnemySoldier.prototype.beforeDead = function(){
+	SCG.GO.Remains.types.getObject('soldier', this.position.clone());
+}

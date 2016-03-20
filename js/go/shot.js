@@ -10,7 +10,7 @@ SCG.GO.Shot = function(prop)
 	if(prop.destination === undefined) {
 		throw 'SCG2.GO.Shot -> destination is undefined';	
 	}
-
+	if(prop.damage == undefined){ prop.damage = 1; }
 	if(prop.size == undefined){ prop.size = new Vector2(1,1); }
 	if(prop.speed == undefined){ prop.speed = 10; }
 	if(prop.strokeColor === undefined) { this.strokeColor = '#ff0000';}
@@ -29,10 +29,12 @@ SCG.GO.Shot.prototype.constructor = SCG.GO.Shot;
 
 SCG.GO.Shot.ShotTypes = {
 	simple: {
+		damage: 1,
 		speed: 10,
 		explosionType: 'tinyExplosion'
 	},
 	sniper: {
+		damage: 50,
 		speed: 100,
 		explosionType: 'tinyExplosion'
 	},
@@ -90,6 +92,8 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 				}
 				this.setDead();
 				SCG.Animations.createObject(this.explosionType, hitPoint);
+				unit.hitted(this.damage);
+				break;
 			}
 		}
 	}

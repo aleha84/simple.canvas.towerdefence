@@ -8,3 +8,5 @@
 -- damage indicator
 - gameplay
 -- optimizations
+-- levels
+-- defenders shooting scatter
