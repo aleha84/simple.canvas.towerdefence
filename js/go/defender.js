@@ -126,7 +126,7 @@ SCG.GO.Defender.prototype.addDefender = function()
 
 		if(this.defenderSoldiers.length == 0)
 		{
-			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: this.position.clone(), parent: this}));
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: this.position.clone(), parent: this, type: 'gunner'}));
 		}
 		else{
 			var angleStep = 360 / (this.defenderSoldiers.length + 1);
@@ -137,7 +137,7 @@ SCG.GO.Defender.prototype.addDefender = function()
 				this.defenderSoldiers[i].position = up.rotate(angleStep*i).add(this.position,true);
 			}
 
-			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true), parent: this}));
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true), parent: this, type: 'gunner'}));
 		}
 	}
 }

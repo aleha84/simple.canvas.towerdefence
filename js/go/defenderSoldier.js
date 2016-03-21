@@ -105,6 +105,16 @@ SCG.GO.DefenderSoldier.prototype.fire = function(){
 	// }));
 }
 
+SCG.GO.DefenderSoldier.prototype.internalRender = function(){
+	if(this.type == 'gunner'){
+		SCG.context.drawImage(SCG.images.rifle, 
+				(this.renderPosition.x ), 
+				(this.renderPosition.y), 
+				this.renderSize.x/2, 
+				this.renderSize.y/2);	
+	}
+}
+
 SCG.GO.DefenderSoldier.prototype.internalUpdate = function(now){
 	if(this.target != undefined){
 		if(!this.target.alive || this.position.distance(this.target.position) > this.range){
