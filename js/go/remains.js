@@ -51,6 +51,8 @@ SCG.GO.Remains.prototype.update = function(now){
 		return;
 	}
 
+	this.customUpdate();
+
 	this.alpha = this.timeToLive / this.timeToLiveOrigin;
 
 	this.timer.lastTimeWork = now;
@@ -62,6 +64,9 @@ SCG.GO.Remains.types = {
 		size: new Vector2(10,10),
 		timeToLive: 2000,
 		timeToLiveOrigin: 2000,
+		customUpdate: function() {
+			this.position.y-=0.1;
+		}
 	},
 	getObject: function(type, position){
 		var img = undefined;
