@@ -74,19 +74,18 @@ SCG.GO.Defender = function(prop)
 	this.shouldRenderMenu = false;
 	this.side = 1;
 	this.defenderSoldiers = [];
-
 	this.setState();
 	SCG.Placeable.set(this);
 	SCG.Placeable.playerUnits[this.id] = this;
 
-	this.fireTimer = {
-		lastTimeWork: new Date,
-		delta : 0,
-		currentDelay: 300,
-		originDelay: 300,
-		doWorkInternal : this.fire,
-		context: this
-	}
+	// this.fireTimer = {
+	// 	lastTimeWork: new Date,
+	// 	delta : 0,
+	// 	currentDelay: 300,
+	// 	originDelay: 300,
+	// 	doWorkInternal : this.fire,
+	// 	context: this
+	// }
 
 
 }
@@ -95,13 +94,13 @@ SCG.GO.Defender.counter = 0;
 SCG.GO.Defender.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
 
-SCG.GO.Defender.prototype.fire = function(){
-	SCG.go.push(new SCG.GO.Shot({
-		side: this.side,
-		position: this.position.clone(),
-		destination: new Vector2(500,50)
-	}));
-}
+// SCG.GO.Defender.prototype.fire = function(){
+// 	SCG.go.push(new SCG.GO.Shot({
+// 		side: this.side,
+// 		position: this.position.clone(),
+// 		destination: new Vector2(500,50)
+// 	}));
+// }
 
 SCG.GO.Defender.prototype.setMenu = function(menu)
 {
@@ -127,7 +126,7 @@ SCG.GO.Defender.prototype.addDefender = function()
 
 		if(this.defenderSoldiers.length == 0)
 		{
-			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: this.position.clone()}));
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: this.position.clone(), parent: this}));
 		}
 		else{
 			var angleStep = 360 / (this.defenderSoldiers.length + 1);
@@ -138,7 +137,7 @@ SCG.GO.Defender.prototype.addDefender = function()
 				this.defenderSoldiers[i].position = up.rotate(angleStep*i).add(this.position,true);
 			}
 
-			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true)}));
+			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true), parent: this}));
 		}
 	}
 }
@@ -209,8 +208,8 @@ SCG.GO.Defender.prototype.internalUpdate = function(now){
 
 	for(var i = 0; i< this.defenderSoldiers.length; i++)
 	{
-		this.defenderSoldiers[i].update();
+		this.defenderSoldiers[i].update(now);
 	}
 
-	doWorkByTimer(this.fireTimer, now);
+	//doWorkByTimer(this.fireTimer, now);
 }
