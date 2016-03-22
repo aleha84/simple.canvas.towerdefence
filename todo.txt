@@ -1,10 +1,8 @@
 - Units
--- Defending
--- Upgrade
--- Idle
+-- rocket man
+-- sniper
 - Menu item modification
-- defender soldiers types
+-- removing unit
 - gameplay
 -- optimizations
 -- levels
--- defenders shooting scatter

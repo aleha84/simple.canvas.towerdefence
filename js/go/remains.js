@@ -46,7 +46,7 @@ SCG.GO.Remains.prototype.update = function(now){
 	this.timer.delta = now - this.timer.lastTimeWork;
 	this.timeToLive -= this.timer.delta;
 	if(this.timeToLive <= 0){
-		console.log(now - this.creationTime);
+		//console.log(now - this.creationTime);
 		this.setDead();
 		return;
 	}

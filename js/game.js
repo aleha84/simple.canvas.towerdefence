@@ -24,6 +24,10 @@ SCG.gameLogics = {
 	isMobile: false
 }
 
+SCG.difficulty = {
+	level: 0,
+}
+
 SCG.go = [];
 SCG.nonplayableGo = [];
 SCG.visibleGo = [];

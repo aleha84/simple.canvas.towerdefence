@@ -38,13 +38,14 @@ SCG.GO.Shot.ShotTypes = {
 		speed: 100,
 		explosionType: 'tinyExplosion'
 	},
-	getShot: function(type, side, position, destination, damageModifier){
+	getShot: function(owner, destination){
 		SCG.go.push(new SCG.GO.Shot($.extend({},{
-			side: side,
-			position: position,
+			owner: owner,
+			side: owner.side,
+			position: owner.position.clone(),
 			destination: destination,
-			damageModifier: damageModifier
-		}, SCG.GO.Shot.ShotTypes[type])));
+			damageModifier: owner.damageModifier
+		}, SCG.GO.Shot.ShotTypes[owner.type])));
 	}
 }
 
@@ -94,6 +95,9 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 				this.hitPoint = hitPoint;
 				this.setDead();
 				unit.hitted(this.damage * this.damageModifier);
+				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
+					this.owner.getExperience(unit.experienceCost);
+				}
 				break;
 			}
 		}

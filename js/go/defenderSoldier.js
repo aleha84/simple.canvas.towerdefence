@@ -13,6 +13,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.id = 'DefenderSoldier' + (SCG.GO.DefenderSoldier.counter++);
 
 	this.target = undefined;
+	this.originRange = 75;
 	this.range = 75;
 	this.side = this.parent.side;
 
@@ -22,6 +23,10 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.damageModifier = 1;
 	this.originDamageModifier = 1;
 	this.level = 0;
+	this.prevLevelExpNeed = 0;
+	this.nextLevelExpNeed= 100;
+	this.nextLevelExpStep = 100;
+	this.currentExperience = 0;
 
 	this.fireTimer = {
 		lastTimeWork: new Date,
@@ -45,11 +50,13 @@ SCG.GO.DefenderSoldier = function(prop)
 		case 'gunner':
 			this.originScatter = 20;
 			this.originFireDelay = 750;
+			this.originRange = 75;
 			break;
 		default:
 			break;
 	}
 
+	this.range = this.originRange;
 	this.currentScatter = this.originScatter;
 	this.fireTimer.originDelay = this.originFireDelay;
 }
@@ -58,17 +65,27 @@ SCG.GO.DefenderSoldier.counter = 0;
 SCG.GO.DefenderSoldier.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.DefenderSoldier.prototype.constructor = SCG.GO.DefenderSoldier;
 
+SCG.GO.DefenderSoldier.prototype.getExperience = function(experience){
+	this.currentExperience += experience;
+	if(this.currentExperience >= this.nextLevelExpNeed){
+		this.levelUp();
+	}
+}
+
 SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 	SCG.GO.Remains.types.getObject('levelUp', this.position.add(new Vector2(0, -this.size.y/2), true), false);
 
 	this.level++;
+	this.currentExperience -= this.nextLevelExpNeed;
+	this.prevLevelExpNeed = this.nextLevelExpNeed;
+	this.nextLevelExpNeed = this.prevLevelExpNeed + this.level*this.nextLevelExpStep;
 
 	this.maxHealth += (25 * this.level);
 	this.health = this.maxHealth;
 
 	switch(this.type){
 		case 'gunner':
-			switch(getRandomInt(1,3)){
+			switch(getRandomInt(1,4)){
 				case 1:
 					this.currentScatter = this.originScatter * (Math.pow(0.91, this.level));
 					break;
@@ -77,6 +94,9 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 					break;
 				case 3:
 					this.damageModifier = this.originDamageModifier  + (0.5 * this.level);
+					break;
+				case 4:
+					this.range = this.originRange  + (7.5 * this.level);
 					break;
 				default:
 					break;
@@ -148,7 +168,7 @@ SCG.GO.DefenderSoldier.prototype.fire = function(){
 		.add(this.target.direction.mul(this.target.speed* ((this.position.distance(this.target.position)) / SCG.GO.Shot.ShotTypes[this.type].speed) ),true)
 		.add(new Vector2(getRandom(-this.originScatter, this.originScatter), getRandom(-this.originScatter, this.originScatter)),true);
 	
-	SCG.GO.Shot.ShotTypes.getShot(this.type, this.side, this.position.clone(), targetNextPosition.clone(), this.damageModifier);
+	SCG.GO.Shot.ShotTypes.getShot(this, targetNextPosition.clone());
 }
 
 SCG.GO.DefenderSoldier.prototype.internalRender = function(){
