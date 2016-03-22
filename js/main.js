@@ -12,7 +12,8 @@ SCG.src = {
 	add_soldier: 'content/images/add_soldier.png',
 	explosion_sheet: 'content/images/explosionSheet.png',
 	soldier_remains: 'content/images/soldierremains.png',
-	rifle: 'content/images/rifle.png'
+	rifle: 'content/images/rifle.png',
+	level_up: 'content/images/levelUp.png'
 }
 
 SCG.images = {
