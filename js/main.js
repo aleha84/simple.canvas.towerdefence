@@ -19,6 +19,7 @@ SCG.src = {
 	explosion_sheet: 'content/images/explosionSheet.png',
 	soldier_remains: 'content/images/soldierremains.png',
 	rifle: 'content/images/rifle.png',
+	sniper: 'content/images/sniper.png',
 	level_up: 'content/images/levelUp.png'
 }
 
