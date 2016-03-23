@@ -73,6 +73,9 @@ SCG.GO.GO.prototype = {
 			SCG.EnemySpawner.enemySoldiers.currentCount--;	
 			delete SCG.Placeable.enemyUnits[this.id];
 		}
+		else if (this instanceof SCG.GO.Shot){
+			SCG.Animations.createObject(this.explosionType, this.hitPoint != undefined ? this.hitPoint : this.position);
+		}
 	},
 
 	isAlive : function(){ 

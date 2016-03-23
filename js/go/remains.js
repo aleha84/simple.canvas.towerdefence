@@ -46,10 +46,14 @@ SCG.GO.Remains.prototype.update = function(now){
 	this.timer.delta = now - this.timer.lastTimeWork;
 	this.timeToLive -= this.timer.delta;
 	if(this.timeToLive <= 0){
-		console.log(now - this.creationTime);
+		//console.log(now - this.creationTime);
 		this.setDead();
 		return;
 	}
+	if(this.customUpdate != undefined){
+		this.customUpdate();	
+	}
+	
 
 	this.alpha = this.timeToLive / this.timeToLiveOrigin;
 
@@ -62,17 +66,43 @@ SCG.GO.Remains.types = {
 		size: new Vector2(10,10),
 		timeToLive: 2000,
 		timeToLiveOrigin: 2000,
+		customUpdate: function() {
+			this.position.y-=0.1;
+		}
 	},
-	getObject: function(type, position){
+	levelUp: {
+		imgType: 2,
+		size: new Vector2(5,5),
+		timeToLive: 1000,
+		timeToLiveOrigin: 1000,
+		customUpdate: function() {
+			this.position.y-=0.1;
+		}
+	},
+	getObject: function(type, position, isPush){
+		if(isPush === undefined){
+			isPush = true;
+		}
+
 		var img = undefined;
 		switch(SCG.GO.Remains.types[type].imgType)
 		{
 			case 1: 
 				img = SCG.images.soldier_remains;
 				break;
+			case 2: 
+				img = SCG.images.level_up;
+				break;
 			default:
 				break;
 		}
-		SCG.go.push(new SCG.GO.Remains($.extend({position: position, img: img}, SCG.GO.Remains.types[type])));
+		var r = new SCG.GO.Remains($.extend({position: position, img: img}, SCG.GO.Remains.types[type]));
+		if(isPush){
+			SCG.go.push(r);	
+		}
+		else{
+			SCG.go.unshift(r);
+		}
+		
 	}
 }

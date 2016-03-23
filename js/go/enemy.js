@@ -76,12 +76,12 @@ SCG.GO.EnemySoldier = function(prop)
 	}
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
-	if(prop.maxHealth == undefined){ prop.maxHealth = 5; }
+	if(prop.maxHealth == undefined){ prop.maxHealth = 2 + (SCG.difficulty.level*0.75); }
 	SCG.GO.GO.call(this,prop);
 
 	//overriding defaults and props
 	this.img = SCG.images.enemy_soldier;
-	this.speed = 0.5;
+	this.speed = 0.25 + (SCG.difficulty.level*0.05);
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 15;
 	this.updatePlaceable = true;
@@ -89,6 +89,7 @@ SCG.GO.EnemySoldier = function(prop)
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
 	this.side = 2;
 	this.isDrawingHealthBar = true;
+	this.experienceCost = 5 + (SCG.difficulty.level*1.5);
 
 	// SCG.Placeable.set(this);
 	 SCG.Placeable.enemyUnits[this.id] = this;

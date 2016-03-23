@@ -28,9 +28,9 @@ SCG.GO.Shot.prototype = Object.create( SCG.GO.GO.prototype );
 SCG.GO.Shot.prototype.constructor = SCG.GO.Shot;
 
 SCG.GO.Shot.ShotTypes = {
-	simple: {
+	gunner: {
 		damage: 1,
-		speed: 10,
+		speed: 5,
 		explosionType: 'tinyExplosion'
 	},
 	sniper: {
@@ -38,12 +38,14 @@ SCG.GO.Shot.ShotTypes = {
 		speed: 100,
 		explosionType: 'tinyExplosion'
 	},
-	getShot: function(type, side, position, destination){
+	getShot: function(owner, destination){
 		SCG.go.push(new SCG.GO.Shot($.extend({},{
-			side: side,
-			position: position,
-			destination: destination
-		}, SCG.GO.Shot.ShotTypes[type])));
+			owner: owner,
+			side: owner.side,
+			position: owner.position.clone(),
+			destination: destination,
+			damageModifier: owner.damageModifier
+		}, SCG.GO.Shot.ShotTypes[owner.type])));
 	}
 }
 
@@ -90,9 +92,12 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 						hitPoint = segment.begin;
 					}
 				}
+				this.hitPoint = hitPoint;
 				this.setDead();
-				SCG.Animations.createObject(this.explosionType, hitPoint);
-				unit.hitted(this.damage);
+				unit.hitted(this.damage * this.damageModifier);
+				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
+					this.owner.getExperience(unit.experienceCost);
+				}
 				break;
 			}
 		}
