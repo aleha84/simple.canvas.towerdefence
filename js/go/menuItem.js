@@ -30,5 +30,7 @@ SCG.GO.MenuItem.prototype.internalUpdate = function(){
 	if(this.mouseOver && SCG.gameControls.mousestate.click.isClick)
 	{
 		this.clickCallback(this);
+		// SCG.defenderMenu.shouldRenderMenu = false;
+		// SCG.defenderMenu.clicked = true;
 	}
 }

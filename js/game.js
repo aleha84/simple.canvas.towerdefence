@@ -50,6 +50,12 @@ SCG.debugger =
 	}
 }
 
+SCG.defenderMenu = {
+	menu : undefined,
+	shouldRenderMenu: false,
+	clicked: false
+}
+
 SCG.gameControls = {
 	scale:
 	{
@@ -82,6 +88,9 @@ SCG.gameControls = {
 			{
 				this.click.prevStateDown = false;
 				this.click.isClick = true;
+
+				// SCG.defenderMenu.menu = undefined;
+				// SCG.defenderMenu.shouldRenderMenu = false;
 			}
 			else if(this.click.isClick)
 			{

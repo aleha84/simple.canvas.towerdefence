@@ -137,6 +137,22 @@ SCG.draw = function(){
 		}
 	}
 
+	if(SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu!= undefined){
+		if(!SCG.defenderMenu.clicked && SCG.gameControls.mousestate.click.isClick){
+			SCG.defenderMenu.shouldRenderMenu = false;
+		}
+		
+		if(SCG.defenderMenu.clicked){
+			SCG.defenderMenu.clicked = false;
+		}
+
+		SCG.defenderMenu.menu.update(now);
+		SCG.defenderMenu.menu.render();
+	}
+	else if(!SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu!= undefined){
+		SCG.defenderMenu.menu = undefined;
+	}
+
 	if(SCG.Placeable.show){
 		SCG.Placeable.render();
 	}
