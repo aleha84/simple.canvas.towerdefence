@@ -100,7 +100,8 @@ SCG.GO.Defender.prototype.setMenu = function(menu)
 	{
 		menu.items[i].position = menu.position.add(menu.items[i].position,true);
 	}
-	this.menu = menu;
+
+	SCG.defenderMenu.menu = menu;
 }
 
 SCG.GO.Defender.prototype.upgrade = function()
@@ -117,7 +118,7 @@ SCG.GO.Defender.prototype.removeDefender = function(defenderSoldierId)
 		}
 	}
 
-	this.createMenuItems();
+	//this.createMenuItems();
 }
 
 SCG.GO.Defender.prototype.addDefender = function(type)
@@ -141,7 +142,7 @@ SCG.GO.Defender.prototype.addDefender = function(type)
 			this.defenderSoldiers.push(new SCG.GO.DefenderSoldier({position: up.rotate(angleStep*this.defenderSoldiers.length).add(this.position,true), parent: this, type: type}));
 		}
 
-		this.createMenuItems();
+		//this.createMenuItems();
 	}
 }
 
@@ -152,7 +153,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 
 	if(this.state.upgradeTo != undefined){
 		items.push(
-			new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images.upgrade, 
+			new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images.upgrade, 
 				clickCallback: function(context) { 
 					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 					{
@@ -166,7 +167,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 		for(var j = 0; j< types.length;j++){
 			(function(_j) {
 				items.push(
-				new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images['add_'+types[_j]], 
+				new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images['add_'+types[_j]], 
 					clickCallback: function(context) {  
 						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 						{
@@ -180,7 +181,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 	for(var i = 0; i < this.defenderSoldiers.length; i++){
 		(function(ds){
 			items.push(
-			new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images['remove_'+ds.type], 
+			new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images['remove_'+ds.type], 
 				clickCallback: function(context) {  
 					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 					{
@@ -214,7 +215,7 @@ SCG.GO.Defender.prototype.setState = function(state)
 
 	// this.setMenu(menu);
 
-	this.createMenuItems();
+	//this.createMenuItems();
 
 	// if(this.state.lightProp != undefined)
 	// {
@@ -244,10 +245,10 @@ SCG.GO.Defender.prototype.internalRender = function(){
 		this.defenderSoldiers[i].render();
 	}
 
-	if(this.shouldRenderMenu && this.menu != undefined)
-	{
-		this.menu.render();
-	}
+	// if(this.shouldRenderMenu && this.menu != undefined)
+	// {
+	// 	this.menu.render();
+	// }
 }
 
 SCG.GO.Defender.prototype.internalPreUpdate = function(){ 
@@ -258,10 +259,16 @@ SCG.GO.Defender.prototype.internalPreUpdate = function(){
 }
 
 SCG.GO.Defender.prototype.internalUpdate = function(now){ 
-	this.shouldRenderMenu = (SCG.gameControls.mousestate.leftButtonDown || SCG.gameControls.mousestate.click.isClick) && (this.mouseOver || this.menu.mouseOver);
-	if(this.shouldRenderMenu && this.menu != undefined)
-	{
-		this.menu.update();
+	//this.shouldRenderMenu = (SCG.gameControls.mousestate.leftButtonDown || SCG.gameControls.mousestate.click.isClick) && (this.mouseOver || this.menu.mouseOver);
+	// if(this.shouldRenderMenu && this.menu != undefined)
+	// {
+	// 	this.menu.update();
+	// }
+
+	if(this.mouseOver && SCG.gameControls.mousestate.click.isClick && !(SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu.mouseOver)){
+		this.createMenuItems();
+		SCG.defenderMenu.shouldRenderMenu = true;
+		SCG.defenderMenu.clicked =true;
 	}
 
 	for(var i = 0; i< this.defenderSoldiers.length; i++)
