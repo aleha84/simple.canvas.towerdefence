@@ -72,7 +72,7 @@ SCG.GO.Remains.types = {
 	},
 	levelUp: {
 		imgType: 2,
-		size: new Vector2(5,5),
+		size: new Vector2(15,15),
 		timeToLive: 1000,
 		timeToLiveOrigin: 1000,
 		customUpdate: function() {

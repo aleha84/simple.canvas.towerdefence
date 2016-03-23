@@ -11,6 +11,7 @@ SCG.GO.Shot = function(prop)
 		throw 'SCG2.GO.Shot -> destination is undefined';	
 	}
 	if(prop.damage == undefined){ prop.damage = 1; }
+	if(prop.penetration  === undefined) { this.penetration  = 1;}
 	if(prop.size == undefined){ prop.size = new Vector2(1,1); }
 	if(prop.speed == undefined){ prop.speed = 10; }
 	if(prop.strokeColor === undefined) { this.strokeColor = '#ff0000';}
@@ -35,7 +36,7 @@ SCG.GO.Shot.ShotTypes = {
 	},
 	sniper: {
 		damage: 50,
-		speed: 100,
+		speed: 15,
 		explosionType: 'tinyExplosion'
 	},
 	getShot: function(owner, destination){
@@ -44,7 +45,8 @@ SCG.GO.Shot.ShotTypes = {
 			side: owner.side,
 			position: owner.position.clone(),
 			destination: destination,
-			damageModifier: owner.damageModifier
+			damageModifier: owner.damageModifier,
+			penetration: owner.penetration
 		}, SCG.GO.Shot.ShotTypes[owner.type])));
 	}
 }
@@ -93,11 +95,20 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 					}
 				}
 				this.hitPoint = hitPoint;
-				this.setDead();
+				
 				unit.hitted(this.damage * this.damageModifier);
 				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
 					this.owner.getExperience(unit.experienceCost);
 				}
+
+				this.penetration--;
+				if(this.penetration <= 0){
+					this.setDead();	
+				}
+				else{
+					this.damage /= 2;
+				}
+				
 				break;
 			}
 		}

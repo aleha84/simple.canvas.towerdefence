@@ -20,6 +20,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.originScatter = 1;
 	this.currentScatter = 1;
 
+	this.penetration = 1;
 	this.damageModifier = 1;
 	this.originDamageModifier = 1;
 	this.level = 0;
@@ -27,6 +28,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.nextLevelExpNeed= 100;
 	this.nextLevelExpStep = 100;
 	this.currentExperience = 0;
+	this.weaponImg = undefined;
 
 	this.fireTimer = {
 		lastTimeWork: new Date,
@@ -51,7 +53,13 @@ SCG.GO.DefenderSoldier = function(prop)
 			this.originScatter = 20;
 			this.originFireDelay = 750;
 			this.originRange = 75;
+			this.weaponImg = SCG.images.rifle;
 			break;
+		case 'sniper':
+			this.originScatter = 5;
+			this.originFireDelay = 2000;
+			this.originRange = 150;
+			this.weaponImg = SCG.images.sniper;
 		default:
 			break;
 	}
@@ -99,6 +107,19 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 					this.range = this.originRange  + (7.5 * this.level);
 					break;
 				default:
+					break;
+			}
+			break;
+		case 'sniper':
+			switch (getRandomInt(1,3)){
+				case 1:
+					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
+					break;
+				case 2:
+					this.range = this.originRange  + (50 * this.level);
+					break;
+				case 3: 
+					this.penetration++;
 					break;
 			}
 			break;
@@ -167,13 +188,18 @@ SCG.GO.DefenderSoldier.prototype.fire = function(){
 	var targetNextPosition = this.target.position
 		.add(this.target.direction.mul(this.target.speed* ((this.position.distance(this.target.position)) / SCG.GO.Shot.ShotTypes[this.type].speed) ),true)
 		.add(new Vector2(getRandom(-this.originScatter, this.originScatter), getRandom(-this.originScatter, this.originScatter)),true);
+
+	if(this.type == 'sniper'){
+		targetNextPosition = this.position.add(this.position.direction(targetNextPosition).mul(this.range), true);
+	}
 	
 	SCG.GO.Shot.ShotTypes.getShot(this, targetNextPosition.clone());
 }
 
 SCG.GO.DefenderSoldier.prototype.internalRender = function(){
-	if(this.type == 'gunner'){
-		SCG.context.drawImage(SCG.images.rifle, 
+	
+	if(this.weaponImg != undefined){
+		SCG.context.drawImage(this.weaponImg, 
 				(this.renderPosition.x - this.renderSize.x * (1/6) ), 
 				(this.renderPosition.y - this.renderSize.y * (1/6)), 
 				this.renderSize.x* 2/3, 
