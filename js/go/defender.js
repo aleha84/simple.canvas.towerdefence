@@ -86,6 +86,16 @@ SCG.GO.Defender.prototype.setMenu = function(menu)
 {
 	menu.parent = this;
 	menu.position = this.position.substract(new Vector2(0,menu.size.y-this.size.y),true)
+	var xDelta = menu.position.x - menu.size.x/2;
+	if(xDelta < 0) {
+		menu.position.x += -1*xDelta;
+	}
+
+	var yDelta = menu.position.y - menu.size.y/2;
+	if(yDelta < 0){
+		menu.position.y = this.position.y + (menu.size.y-this.size.y);
+	}
+
 	for(var i=0;i<menu.items.length;i++)
 	{
 		menu.items[i].position = menu.position.add(menu.items[i].position,true);
@@ -142,7 +152,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 
 	if(this.state.upgradeTo != undefined){
 		items.push(
-			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
+			new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images.upgrade, 
 				clickCallback: function(context) { 
 					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 					{
@@ -156,7 +166,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 		for(var j = 0; j< types.length;j++){
 			(function(_j) {
 				items.push(
-				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images['add_'+types[_j]], 
+				new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images['add_'+types[_j]], 
 					clickCallback: function(context) {  
 						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 						{
@@ -170,7 +180,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 	for(var i = 0; i < this.defenderSoldiers.length; i++){
 		(function(ds){
 			items.push(
-			new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images['remove_'+ds.type], 
+			new SCG.GO.MenuItem({size: new Vector2(60,60), position: new Vector2, img: SCG.images['remove_'+ds.type], 
 				clickCallback: function(context) {  
 					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 					{
