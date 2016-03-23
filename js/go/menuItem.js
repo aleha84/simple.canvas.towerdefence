@@ -27,10 +27,8 @@ SCG.GO.MenuItem.prototype.internalRender = function(){
 }
 
 SCG.GO.MenuItem.prototype.internalUpdate = function(){ 
-	if(this.mouseOver && SCG.gameControls.mousestate.click.isClick)
+	if(this.mouseOver && SCG.gameControls.mousestate.click.isClick && !SCG.defenderMenu.clicked)
 	{
 		this.clickCallback(this);
-		// SCG.defenderMenu.shouldRenderMenu = false;
-		// SCG.defenderMenu.clicked = true;
 	}
 }

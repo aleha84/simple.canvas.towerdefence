@@ -85,7 +85,7 @@ SCG.GO.Defender.prototype.constructor = SCG.GO.Defender;
 SCG.GO.Defender.prototype.setMenu = function(menu)
 {
 	menu.parent = this;
-	menu.position = this.position.substract(new Vector2(0,menu.size.y-this.size.y),true)
+	menu.position = this.position.substract(new Vector2(0,menu.size.y/2+this.size.y/2),true)
 	var xDelta = menu.position.x - menu.size.x/2;
 	if(xDelta < 0) {
 		menu.position.x += -1*xDelta;
@@ -93,7 +93,7 @@ SCG.GO.Defender.prototype.setMenu = function(menu)
 
 	var yDelta = menu.position.y - menu.size.y/2;
 	if(yDelta < 0){
-		menu.position.y = this.position.y + (menu.size.y-this.size.y);
+		menu.position.y = this.position.y + (menu.size.y/2+this.size.y/2);
 	}
 
 	for(var i=0;i<menu.items.length;i++)
