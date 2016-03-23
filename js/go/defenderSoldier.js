@@ -2,7 +2,7 @@ SCG.GO.DefenderSoldier = function(prop)
 {
 	if(prop.position === undefined)
 	{
-		throw 'SCG2.GO.DefenderSoldier -> position is undefined';
+		throw 'SCG.GO.DefenderSoldier -> position is undefined';
 	}
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
