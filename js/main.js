@@ -21,7 +21,8 @@ SCG.src = {
 	rifle: 'content/images/rifle.png',
 	sniper: 'content/images/sniper.png',
 	rpg: 'content/images/rpg.png',
-	level_up: 'content/images/levelUp.png'
+	level_up: 'content/images/levelUp.png',
+	info_panel: 'content/images/infoPanel.png'
 }
 
 SCG.images = {
@@ -154,6 +155,8 @@ SCG.draw = function(){
 	else if(!SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu!= undefined){
 		SCG.defenderMenu.menu = undefined;
 	}
+
+	SCG.difficulty.render();
 
 	if(SCG.Placeable.show){
 		SCG.Placeable.render();

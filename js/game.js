@@ -26,6 +26,18 @@ SCG.gameLogics = {
 
 SCG.difficulty = {
 	level: 0,
+	money: 0,
+	infoPanel: {
+		width: 100,
+		height: 40
+	},
+	render: function(){
+		SCG.context.drawImage(SCG.images.info_panel,
+			0,
+			SCG.battlefield.height - this.infoPanel.height * SCG.gameControls.scale.times,
+			this.infoPanel.width * SCG.gameControls.scale.times,
+			this.infoPanel.height * SCG.gameControls.scale.times);
+	}
 }
 
 SCG.go = [];
