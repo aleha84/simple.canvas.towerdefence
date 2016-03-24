@@ -90,7 +90,6 @@ SCG.GO.EnemySoldier = function(prop)
 	this.side = 2;
 	this.isDrawingHealthBar = true;
 	this.experienceCost = 5 + (SCG.difficulty.level*1.5);
-	this.moneyCost = 1 + (SCG.difficulty.level*0.5);
 
 	// SCG.Placeable.set(this);
 	 SCG.Placeable.enemyUnits[this.id] = this;
