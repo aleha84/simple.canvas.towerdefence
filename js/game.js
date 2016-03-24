@@ -26,6 +26,41 @@ SCG.gameLogics = {
 
 SCG.difficulty = {
 	level: 0,
+	money: 0,
+	infoPanel: {
+		width: 100,
+		height: 50,
+		fontSize: 15,
+	},
+	render: function(){
+
+		var panelTopLeft = new Vector2(0, SCG.battlefield.height - this.infoPanel.height * SCG.gameControls.scale.times);
+		SCG.context.drawImage(SCG.images.info_panel,
+			panelTopLeft.x,
+			panelTopLeft.y,
+			this.infoPanel.width * SCG.gameControls.scale.times,
+			this.infoPanel.height * SCG.gameControls.scale.times);
+
+		SCG.context.drawImage(SCG.images.money,
+			panelTopLeft.x + 20* SCG.gameControls.scale.times,
+			panelTopLeft.y + 10* SCG.gameControls.scale.times,
+			15 * SCG.gameControls.scale.times,
+			15 * SCG.gameControls.scale.times);
+
+		SCG.context.drawImage(SCG.images.level,
+			panelTopLeft.x + 20* SCG.gameControls.scale.times,
+			panelTopLeft.y + 27* SCG.gameControls.scale.times,
+			15 * SCG.gameControls.scale.times,
+			15 * SCG.gameControls.scale.times);
+
+
+		SCG.context.font = this.infoPanel.fontSize * SCG.gameControls.scale.times + "px Arial";
+		SCG.context.fillStyle = 'gold';
+		SCG.context.fillText(SCG.difficulty.money, panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 23* SCG.gameControls.scale.times);
+
+		SCG.context.fillStyle = 'gray';
+		SCG.context.fillText(SCG.difficulty.level+1, panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 40* SCG.gameControls.scale.times);
+	}
 }
 
 SCG.go = [];
