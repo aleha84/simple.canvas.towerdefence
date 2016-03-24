@@ -12,6 +12,8 @@ SCG.GO.Shot = function(prop)
 	}
 	if(prop.damage == undefined){ prop.damage = 1; }
 	if(prop.penetration  === undefined) { this.penetration  = 1;}
+	if(prop.explosionRadius  === undefined) { this.explosionRadius  = 1;}
+	if(prop.isExplosive  === undefined) { this.isExplosive  = false;}
 	if(prop.size == undefined){ prop.size = new Vector2(1,1); }
 	if(prop.speed == undefined){ prop.speed = 10; }
 	if(prop.strokeColor === undefined) { this.strokeColor = '#ff0000';}
@@ -39,6 +41,13 @@ SCG.GO.Shot.ShotTypes = {
 		speed: 15,
 		explosionType: 'tinyExplosion'
 	},
+	rpg:{
+		damage: 100,
+		speed: 10,
+		explosionRadius: 20,
+		explosionType: 'mediumExplosion',	
+		isExplosive : true
+	},
 	getShot: function(owner, destination){
 		SCG.go.push(new SCG.GO.Shot($.extend({},{
 			owner: owner,
@@ -46,7 +55,8 @@ SCG.GO.Shot.ShotTypes = {
 			position: owner.position.clone(),
 			destination: destination,
 			damageModifier: owner.damageModifier,
-			penetration: owner.penetration
+			penetration: owner.penetration, 
+			explosionRadiusModifier: owner.explosionRadiusModifier
 		}, SCG.GO.Shot.ShotTypes[owner.type])));
 	}
 }
@@ -59,6 +69,40 @@ SCG.GO.Shot.prototype.internalRender = function(){
 	var lineTo = this.renderPosition.add(this.direction.mul(this.speed*SCG.gameControls.scale.times),true);
 	SCG.context.lineTo(lineTo.x, lineTo.y);
 	SCG.context.stroke();
+}
+
+SCG.GO.Shot.prototype.explosion = function(position){
+	var units = this.side == 1 ? SCG.Placeable.enemyUnits : SCG.Placeable.playerUnits;
+	var damage = 0;
+	var explosionRadius = this.explosionRadius * this.explosionRadiusModifier;
+	for(var unitId in units) {
+		if(units.hasOwnProperty(unitId)){
+			var unit = units[unitId];
+			var distance = position.distance(unit.position);
+			if(distance <= explosionRadius){
+				if(distance <= explosionRadius / 2){
+					damage = this.damage * this.damageModifier;
+				}
+				else if(distance > explosionRadius / 2 &&  distance <= explosionRadius * 3/4 ){
+					damage = this.damage * this.damageModifier / 2;
+				}
+				else {
+					damage = this.damage * this.damageModifier / 4;	
+				}
+
+				unit.hitted(damage);
+				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
+					this.owner.getExperience(unit.experienceCost);
+				}
+			}
+		}
+	}
+}
+
+SCG.GO.Shot.prototype.beforeDead = function(){
+	if(this.isExplosive){
+		this.explosion(this.hitPoint != undefined ? this.hitPoint : this.position);
+	}
 }
 
 SCG.GO.Shot.prototype.internalPreUpdate = function(){
@@ -96,6 +140,11 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 				}
 				this.hitPoint = hitPoint;
 				
+				if(this.isExplosive){
+					this.setDead();	
+					break;
+				}
+
 				unit.hitted(this.damage * this.damageModifier);
 				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
 					this.owner.getExperience(unit.experienceCost);

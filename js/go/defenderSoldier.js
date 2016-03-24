@@ -23,6 +23,8 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.penetration = 1;
 	this.damageModifier = 1;
 	this.originDamageModifier = 1;
+	this.explosionRadiusModifier = 1;
+	this.originExplosionRadiusModifier = 1;
 	this.level = 0;
 	this.prevLevelExpNeed = 0;
 	this.nextLevelExpNeed= 100;
@@ -60,6 +62,13 @@ SCG.GO.DefenderSoldier = function(prop)
 			this.originFireDelay = 2000;
 			this.originRange = 150;
 			this.weaponImg = SCG.images.sniper;
+			break;
+		case 'rpg':
+			this.originScatter = 10;
+			this.originFireDelay = 6000;
+			this.originRange = 110;
+			this.weaponImg = SCG.images.rpg;
+			break;
 		default:
 			break;
 	}
@@ -123,6 +132,21 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 					break;
 			}
 			break;
+		case 'rpg':
+			switch (getRandomInt(1,3)){
+				case 1:
+					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
+					break;
+				case 2:
+					this.range = this.originRange  + (10 * this.level);
+					break;
+				case 3:
+					this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
+					break;
+				case 4:
+					this.explosionRadiusModifier = this.originExplosionRadiusModifier  + (0.2 * this.level);
+					break;
+			}
 		default:
 			break;
 	}

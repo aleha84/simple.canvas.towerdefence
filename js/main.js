@@ -20,6 +20,7 @@ SCG.src = {
 	soldier_remains: 'content/images/soldierremains.png',
 	rifle: 'content/images/rifle.png',
 	sniper: 'content/images/sniper.png',
+	rpg: 'content/images/rpg.png',
 	level_up: 'content/images/levelUp.png'
 }
 
