@@ -22,6 +22,8 @@ SCG.src = {
 	sniper: 'content/images/sniper.png',
 	rpg: 'content/images/rpg.png',
 	level_up: 'content/images/levelUp.png',
+	money: 'content/images/money.png',
+	level: 'content/images/level.png',
 	info_panel: 'content/images/infoPanel.png'
 }
 
