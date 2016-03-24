@@ -56,7 +56,6 @@ SCG.GO.GO.prototype = {
 		//console.log('bang! ' + this.id);
 		this.health -= damage;
 		if(this.health <= 0) {
-			this.beforeDead();
 			this.setDead();
 		}
 	},
@@ -64,6 +63,8 @@ SCG.GO.GO.prototype = {
 
 	},
 	setDead : function() {
+		this.beforeDead();
+		
 		this.alive = false;
 		if(this.hasPlaceable) {
 			SCG.Placeable.remove(this);

@@ -17,6 +17,15 @@ SCG.Animations = {
 		sourceFrameSize: new Vector2(100,100),
 		explosionImageType: 1
 	},
+	mediumExplosion: {
+		totalFrameCount: 81,
+		framesInRow: 9,
+		framesRowsCount: 9,
+		frameChangeDelay: 6,
+		destinationFrameSize: new Vector2(20,20),
+		sourceFrameSize: new Vector2(100,100),
+		explosionImageType: 1
+	},
 	createObject: function(type, position){
 		var obj = new SCG.GO.Animated($.extend({}, this[type], {img : SCG.images.explosion_sheet, position : position }));
 		// switch(type){
