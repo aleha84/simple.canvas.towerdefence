@@ -5,3 +5,8 @@
 --level progress bar 
 -spawner
 --difficulty
+--new enemy units
+--aggresive enemies
+-game over conditions
+-pause button
+-help info
