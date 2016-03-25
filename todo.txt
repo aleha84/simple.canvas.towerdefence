@@ -1,8 +1,7 @@
-- Units
--- rocket man
--- sniper
-- Menu item modification
--- removing unit
+
 - gameplay
 -- optimizations
--- levels
+-difficulty
+--level progress bar 
+-spawner
+--difficulty

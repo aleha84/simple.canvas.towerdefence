@@ -52,14 +52,14 @@ SCG.GO.DefenderSoldier = function(prop)
 
 	switch(this.type){
 		case 'gunner':
-			this.originScatter = 20;
-			this.originFireDelay = 750;
-			this.originRange = 75;
+			this.originScatter = 10;
+			this.originFireDelay = 650;
+			this.originRange = 70;
 			this.weaponImg = SCG.images.rifle;
 			break;
 		case 'sniper':
 			this.originScatter = 5;
-			this.originFireDelay = 2000;
+			this.originFireDelay = 3000;
 			this.originRange = 150;
 			this.weaponImg = SCG.images.sniper;
 			break;

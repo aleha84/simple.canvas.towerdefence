@@ -26,7 +26,65 @@ SCG.gameLogics = {
 
 SCG.difficulty = {
 	level: 0,
-	money: 0,
+	enemyKilled: 0,
+	enemyKilledToNextLevel: 15,
+	enemyKilledToNextLevelStep: 15,
+	enemyKilledToNextLevelPrev: 0,
+	addKill: function(){
+		this.enemyKilled++;
+		if(this.enemyKilled > this.enemyKilledToNextLevel){
+			this.level++;
+			this.enemyKilledToNextLevelPrev = this.enemyKilledToNextLevel;
+			this.enemyKilledToNextLevel = this.enemyKilledToNextLevelPrev + this.enemyKilledToNextLevelStep*(this.level+1);
+		}
+	},
+	money: 150,
+	costs: {
+		gunner: {
+			base: 50,
+			getCost: function() {
+				return this.base + SCG.difficulty.costs.getAmountOf('gunner')*10;
+			},
+			getRefund: function(level) {
+				return (this.base/2) + level * 5;
+			}
+		},
+		sniper: {
+			base: 200,
+			getCost: function() {
+				return this.base + SCG.difficulty.costs.getAmountOf('sniper')*40;
+			},
+			getRefund: function(level) {
+				return (this.base/2) + level * 20;
+			}
+		},
+		rpg: {
+			base: 500,
+			getCost: function() {
+				return this.base + SCG.difficulty.costs.getAmountOf('rpg')*100;
+			},
+			getRefund: function(level) {
+				return (this.base/2) + level * 20;
+			}
+		},
+		getAmountOf: function(type){
+			var result = 0;
+			for(var unitId in SCG.Placeable.playerUnits) {
+				if(SCG.Placeable.playerUnits.hasOwnProperty(unitId)){
+					var unit = SCG.Placeable.playerUnits[unitId];
+					if(unit.defenderSoldiers.length > 0){
+						for(var i = 0;i<unit.defenderSoldiers.length;i++){
+							if(unit.defenderSoldiers[i].type == type){
+								result++;
+							}
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+	},
 	infoPanel: {
 		width: 100,
 		height: 50,
