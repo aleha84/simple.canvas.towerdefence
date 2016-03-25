@@ -90,11 +90,21 @@ SCG.GO.Shot.prototype.explosion = function(position){
 					damage = this.damage * this.damageModifier / 4;	
 				}
 
-				unit.hitted(damage);
-				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
-					this.owner.getExperience(unit.experienceCost);
-				}
+				this.hit(unit, damage);
 			}
+		}
+	}
+}
+
+SCG.GO.Shot.prototype.hit = function(unit, damage) {
+	unit.hitted(damage);
+	if(!unit.alive){
+		if(unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
+			this.owner.getExperience(unit.experienceCost);	
+		}
+		
+		if(unit.moneyCost != undefined){
+			SCG.difficulty.money += unit.moneyCost;
 		}
 	}
 }
@@ -145,10 +155,7 @@ SCG.GO.Shot.prototype.internalPreUpdate = function(){
 					break;
 				}
 
-				unit.hitted(this.damage * this.damageModifier);
-				if(!unit.alive && unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
-					this.owner.getExperience(unit.experienceCost);
-				}
+				this.hit(unit, this.damage * this.damageModifier);
 
 				this.penetration--;
 				if(this.penetration <= 0){

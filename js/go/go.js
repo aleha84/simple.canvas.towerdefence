@@ -73,6 +73,7 @@ SCG.GO.GO.prototype = {
 		if(this instanceof SCG.GO.EnemySoldier){
 			SCG.EnemySpawner.enemySoldiers.currentCount--;	
 			delete SCG.Placeable.enemyUnits[this.id];
+			SCG.difficulty.addKill();
 		}
 		else if (this instanceof SCG.GO.Shot){
 			SCG.Animations.createObject(this.explosionType, this.hitPoint != undefined ? this.hitPoint : this.position);

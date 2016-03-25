@@ -81,7 +81,7 @@ SCG.GO.EnemySoldier = function(prop)
 
 	//overriding defaults and props
 	this.img = SCG.images.enemy_soldier;
-	this.speed = 0.25 + (SCG.difficulty.level*0.05);
+	this.speed = 0.25 + (SCG.difficulty.level*0.025);
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 15;
 	this.updatePlaceable = true;

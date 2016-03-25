@@ -2,20 +2,21 @@ SCG.GO.DefenderState = {
 	empty: {
 		name: 'empty',
 		upgradeTo : 'woodenFence',
+		upgradeCost : 500,
 		img: undefined,
 		maxDefendersCount: 1,
-		getMenuItems: function(){
-			return [
-				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
-					clickCallback: function(context) { 
-						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-						{
-							context.parent.parent.upgrade();
-						}
-					}}),
-				//new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-			];
-		}
+		// getMenuItems: function(){
+		// 	return [
+		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
+		// 			clickCallback: function(context) { 
+		// 				if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+		// 				{
+		// 					context.parent.parent.upgrade();
+		// 				}
+		// 			}}),
+		// 		//new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+		// 	];
+		// }
 		// lightProp : {
 		// 	position: new Vector2,
 		// 	size: new Vector2(30,30),
@@ -33,19 +34,19 @@ SCG.GO.DefenderState = {
 	woodenFence: {
 		name: 'woodenFence',
 		img: undefined,
-		maxDefendersCount : 3,
-		getMenuItems: function(){
-			return [
-				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.add_soldier, 
-					clickCallback: function(context) { 
-						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-						{
-							context.parent.parent.addDefender();
-						}
-					}}),
-				new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-			];
-		}
+		maxDefendersCount : 2,
+		// getMenuItems: function(){
+		// 	return [
+		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.add_soldier, 
+		// 			clickCallback: function(context) { 
+		// 				if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+		// 				{
+		// 					context.parent.parent.addDefender();
+		// 				}
+		// 			}}),
+		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
+		// 	];
+		// }
 	},
 	positions: [new Vector2(300,90), new Vector2(300,200), new Vector2(220,150), new Vector2(80,150), new Vector2(190,25), new Vector2(200,260), new Vector2(30,80), new Vector2(30,220)],
 	init: function(){
@@ -152,39 +153,53 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 			];
 
 	if(this.state.upgradeTo != undefined){
-		items.push(
-			new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images.upgrade, 
-				clickCallback: function(context) { 
-					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-					{
-						context.parent.parent.upgrade();
-					}
-			}}));
+		(function(cost) {
+			if(SCG.difficulty.money >= cost){
+			items.push(
+				new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images.upgrade,
+					text: [{ text: 'Cost: ' + cost }], 
+					clickCallback: function(context) { 
+						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+						{
+							SCG.difficulty.money-=cost;
+							context.parent.parent.upgrade();
+						}
+				}}));	
+			}
+		})(this.state.upgradeCost)
 	}
 
 	if(this.defenderSoldiers.length < this.state.maxDefendersCount){
 		var types = ['gunner', 'sniper', 'rpg'];
 		for(var j = 0; j< types.length;j++){
 			(function(_j) {
-				items.push(
-				new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images['add_'+types[_j]], 
-					clickCallback: function(context) {  
-						if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-						{
-							context.parent.parent.addDefender(types[_j]);
-						}
-					}}));
+				var cost = SCG.difficulty.costs[types[_j]].getCost();
+				if(SCG.difficulty.money >= cost){ 
+					items.push(
+					new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images['add_'+types[_j]], 
+						text: [{ text: 'Cost: ' + cost }],
+						clickCallback: function(context) {  
+							if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
+							{
+								SCG.difficulty.money-=cost;
+								context.parent.parent.addDefender(types[_j]);
+							}
+						}}));
+				}
 			})(j);
 		}
 	}
 
 	for(var i = 0; i < this.defenderSoldiers.length; i++){
 		(function(ds){
+			var cost = SCG.difficulty.costs[ds.type].getRefund(ds.level);
 			items.push(
 			new SCG.GO.MenuItem({size: new Vector2(50,50), position: new Vector2, img: SCG.images['remove_'+ds.type], 
+				text: [{ text: 'Ref: ' + cost }, { text: 'Lvl: ' + (ds.level+1), style: { color: '#05FF2E', size: 10 } }],
 				clickCallback: function(context) {  
 					if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
 					{
+						SCG.difficulty.money+=cost;
 						context.parent.parent.removeDefender(ds.id);
 					}
 				}}));
