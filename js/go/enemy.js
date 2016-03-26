@@ -115,7 +115,7 @@ SCG.GO.EnemySoldier = function(prop)
 	this.side = 2;
 	this.isDrawingHealthBar = true;
 	this.experienceCost = 7 + (SCG.difficulty.level*2.5);
-	this.moneyCost = 2 + (SCG.difficulty.level*0.5);
+	this.moneyCost = 2 + (SCG.difficulty.level*0.1);
 
 	// SCG.Placeable.set(this);
 	 SCG.Placeable.enemyUnits[this.id] = this;
@@ -151,7 +151,7 @@ SCG.GO.EnemyLarge = function(prop)
 	this.side = 2;
 	this.isDrawingHealthBar = true;
 	this.experienceCost = 40 + (SCG.difficulty.level*4.5);
-	this.moneyCost = 20 + (SCG.difficulty.level*2.5);
+	this.moneyCost = 20 + (SCG.difficulty.level*5);
 
 	// SCG.Placeable.set(this);
 	 SCG.Placeable.enemyUnits[this.id] = this;
