@@ -35,12 +35,11 @@ SCG.GO.EnemyPaths = {
 SCG.EnemySpawner = {
 	enemySoldiers: {
 		currentSpawnDelay : 0,
-		originSpawnDelay : 1000,
+		originSpawnDelay : 1250,
 		currentCount: 0,
 		maxCount : 15,
 		countStep: 15,
-		spawner: function(){
-			var path = SCG.GO.EnemyPaths.getRandomPath();
+		spawner: function(path){
 			SCG.go.push(new SCG.GO.EnemySoldier({position: path.shift().clone(), path: path}));
 		},
 		levelUp: function(level){
@@ -48,10 +47,27 @@ SCG.EnemySpawner = {
 			this.originSpawnDelay *= 0.9;
 		}
 	},
+	enemyLarge: {
+		currentSpawnDelay : 0,
+		originSpawnDelay : 6000,
+		currentCount: 0,
+		maxCount : 0,
+		countStep: 1,
+		spawner: function(path){
+			SCG.go.push(new SCG.GO.EnemyLarge({position: path.shift().clone(), path: path}));
+		},
+		levelUp: function(level){
+			if((level+1) % 3 == 0){
+				this.maxCount++;
+				this.originSpawnDelay *= 0.9;	
+			}
+		}
+	},
 	lastTimeWork : new Date,
 	delta: 0,
 	levelUp: function(level){
 		this.enemySoldiers.levelUp(level);
+		this.enemyLarge.levelUp(level);
 	},
 	doWork: function(now){
 		if(SCG.gameLogics.isPaused){
@@ -62,6 +78,7 @@ SCG.EnemySpawner = {
 
 		this.delta = now - this.lastTimeWork;
 		this.doWorkInternal(this.enemySoldiers, this.delta);
+		this.doWorkInternal(this.enemyLarge, this.delta);
 		this.lastTimeWork = now;
 	},
 	doWorkInternal: function(entry, delta){
@@ -70,7 +87,7 @@ SCG.EnemySpawner = {
 			if(entry.currentSpawnDelay < 0){
 				entry.currentSpawnDelay = entry.originSpawnDelay;
 				entry.currentCount++;
-				entry.spawner();
+				entry.spawner(SCG.GO.EnemyPaths.getRandomPath());
 			}
 		}
 	}
@@ -110,4 +127,40 @@ SCG.GO.EnemySoldier.prototype.constructor = SCG.GO.EnemySoldier;
 
 SCG.GO.EnemySoldier.prototype.beforeDead = function(){
 	SCG.GO.Remains.types.getObject('soldier', this.position.clone());
+}
+
+SCG.GO.EnemyLarge = function(prop)
+{
+	if(prop.position === undefined)
+	{
+		throw 'SCG.GO.EnemyLarge -> position is undefined';
+	}
+
+	if(prop.size == undefined){ prop.size = new Vector2(20,20); }
+	if(prop.maxHealth == undefined){ prop.maxHealth = 100 + (SCG.difficulty.level*10); }
+	SCG.GO.GO.call(this,prop);
+
+	//overriding defaults and props
+	this.img = SCG.images.enemy_large;
+	this.speed = 0.1 + (SCG.difficulty.level*0.01);
+	this.randomizeDestination = true;
+	this.randomizeDestinationRadius = 15;
+	this.updatePlaceable = true;
+	this.hasPlaceable = true;
+	this.id = 'EnemyLarge' + (SCG.GO.EnemyLarge.counter++);
+	this.side = 2;
+	this.isDrawingHealthBar = true;
+	this.experienceCost = 40 + (SCG.difficulty.level*4.5);
+	this.moneyCost = 20 + (SCG.difficulty.level*2.5);
+
+	// SCG.Placeable.set(this);
+	 SCG.Placeable.enemyUnits[this.id] = this;
+}
+
+SCG.GO.EnemyLarge.counter = 0;
+SCG.GO.EnemyLarge.prototype = Object.create( SCG.GO.GO.prototype );
+SCG.GO.EnemyLarge.prototype.constructor = SCG.GO.EnemyLarge;
+
+SCG.GO.EnemyLarge.prototype.beforeDead = function(){
+	SCG.GO.Remains.types.getObject('soldierLarge', this.position.clone());
 }

@@ -157,6 +157,10 @@ SCG.GO.DefenderSoldier.prototype.aiming = function(){
 		if(units.hasOwnProperty(unitId)){
 			var unit = units[unitId];
 			var distance = this.position.distance(unit.position);
+			if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
+				unitsInRange.push({distance: distance, unit: unit});
+				break;
+			}
 			if(distance <= this.range){
 				unitsInRange.push({distance: distance, unit: unit});
 			}

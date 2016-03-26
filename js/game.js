@@ -65,7 +65,7 @@ SCG.difficulty = {
 				return this.base + SCG.difficulty.costs.getAmountOf('rpg')*100;
 			},
 			getRefund: function(level) {
-				return (this.base/2) + level * 20;
+				return (this.base/2) + level * 50;
 			}
 		},
 		getAmountOf: function(type){
