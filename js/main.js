@@ -24,6 +24,8 @@ SCG.src = {
 	level_up: 'content/images/levelUp.png',
 	money: 'content/images/money.png',
 	level: 'content/images/level.png',
+	progressBarHolder: 'content/images/progressBarHolder.png',
+	progressBarInner: 'content/images/progressBarInner.png',
 	info_panel: 'content/images/infoPanel.png'
 }
 

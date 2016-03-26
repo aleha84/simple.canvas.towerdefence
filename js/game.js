@@ -32,10 +32,11 @@ SCG.difficulty = {
 	enemyKilledToNextLevelPrev: 0,
 	addKill: function(){
 		this.enemyKilled++;
-		if(this.enemyKilled > this.enemyKilledToNextLevel){
+		if(this.enemyKilled >= this.enemyKilledToNextLevel){
 			this.level++;
 			this.enemyKilledToNextLevelPrev = this.enemyKilledToNextLevel;
-			this.enemyKilledToNextLevel = this.enemyKilledToNextLevelPrev + this.enemyKilledToNextLevelStep*(this.level+1);
+			this.enemyKilledToNextLevel = this.enemyKilledToNextLevelPrev + this.enemyKilledToNextLevelStep*(this.level+1);	
+			SCG.EnemySpawner.levelUp(this.level);
 		}
 	},
 	money: 150,
@@ -50,7 +51,7 @@ SCG.difficulty = {
 			}
 		},
 		sniper: {
-			base: 200,
+			base: 100,
 			getCost: function() {
 				return this.base + SCG.difficulty.costs.getAmountOf('sniper')*40;
 			},
@@ -59,7 +60,7 @@ SCG.difficulty = {
 			}
 		},
 		rpg: {
-			base: 500,
+			base: 200,
 			getCost: function() {
 				return this.base + SCG.difficulty.costs.getAmountOf('rpg')*100;
 			},
@@ -86,7 +87,7 @@ SCG.difficulty = {
 		}
 	},
 	infoPanel: {
-		width: 100,
+		width: 150,
 		height: 50,
 		fontSize: 15,
 	},
@@ -118,6 +119,18 @@ SCG.difficulty = {
 
 		SCG.context.fillStyle = 'gray';
 		SCG.context.fillText(SCG.difficulty.level+1, panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 40* SCG.gameControls.scale.times);
+
+		SCG.context.drawImage(SCG.images.progressBarHolder,
+			panelTopLeft.x + 60* SCG.gameControls.scale.times,
+			panelTopLeft.y + 29* SCG.gameControls.scale.times,
+			65 * SCG.gameControls.scale.times,
+			12 * SCG.gameControls.scale.times);
+
+		SCG.context.drawImage(SCG.images.progressBarInner,
+			panelTopLeft.x + 60.5* SCG.gameControls.scale.times,
+			panelTopLeft.y + 30* SCG.gameControls.scale.times,
+			(64.2 * SCG.gameControls.scale.times) * ((this.enemyKilled - this.enemyKilledToNextLevelPrev) / (this.enemyKilledToNextLevel - this.enemyKilledToNextLevelPrev)),
+			9.5 * SCG.gameControls.scale.times);
 	}
 }
 

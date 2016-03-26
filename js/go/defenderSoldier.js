@@ -35,7 +35,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.fireTimer = {
 		lastTimeWork: new Date,
 		delta : 0,
-		currentDelay: 300,
+		currentDelay: 0,
 		originDelay: 0,
 		doWorkInternal : this.fire,
 		context: this
@@ -52,20 +52,20 @@ SCG.GO.DefenderSoldier = function(prop)
 
 	switch(this.type){
 		case 'gunner':
-			this.originScatter = 10;
-			this.originFireDelay = 650;
-			this.originRange = 70;
+			this.originScatter = 7;
+			this.originFireDelay = 700;
+			this.originRange = 65;
 			this.weaponImg = SCG.images.rifle;
 			break;
 		case 'sniper':
-			this.originScatter = 5;
-			this.originFireDelay = 3000;
-			this.originRange = 150;
+			this.originScatter = 3;
+			this.originFireDelay = 5000;
+			this.originRange = 125;
 			this.weaponImg = SCG.images.sniper;
 			break;
 		case 'rpg':
 			this.originScatter = 10;
-			this.originFireDelay = 6000;
+			this.originFireDelay = 8000;
 			this.originRange = 110;
 			this.weaponImg = SCG.images.rpg;
 			break;
@@ -102,7 +102,8 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 
 	switch(this.type){
 		case 'gunner':
-			switch(getRandomInt(1,4)){
+			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
+			switch(getRandomInt(1,3)){
 				case 1:
 					this.currentScatter = this.originScatter * (Math.pow(0.91, this.level));
 					break;
@@ -110,9 +111,6 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
 					break;
 				case 3:
-					this.damageModifier = this.originDamageModifier  + (0.5 * this.level);
-					break;
-				case 4:
 					this.range = this.originRange  + (7.5 * this.level);
 					break;
 				default:
@@ -133,7 +131,7 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 			}
 			break;
 		case 'rpg':
-			switch (getRandomInt(1,3)){
+			switch (getRandomInt(1,4)){
 				case 1:
 					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
 					break;

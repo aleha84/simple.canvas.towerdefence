@@ -2,7 +2,7 @@ SCG.GO.DefenderState = {
 	empty: {
 		name: 'empty',
 		upgradeTo : 'woodenFence',
-		upgradeCost : 500,
+		upgradeCost : 300,
 		img: undefined,
 		maxDefendersCount: 1,
 		// getMenuItems: function(){

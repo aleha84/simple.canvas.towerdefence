@@ -34,17 +34,25 @@ SCG.GO.EnemyPaths = {
 
 SCG.EnemySpawner = {
 	enemySoldiers: {
-		currentSpawnDelay : 1000,
+		currentSpawnDelay : 0,
 		originSpawnDelay : 1000,
 		currentCount: 0,
-		maxCount : 35,
+		maxCount : 15,
+		countStep: 15,
 		spawner: function(){
 			var path = SCG.GO.EnemyPaths.getRandomPath();
 			SCG.go.push(new SCG.GO.EnemySoldier({position: path.shift().clone(), path: path}));
+		},
+		levelUp: function(level){
+			this.maxCount = (level+1) * this.countStep;
+			this.originSpawnDelay *= 0.9;
 		}
 	},
 	lastTimeWork : new Date,
 	delta: 0,
+	levelUp: function(level){
+		this.enemySoldiers.levelUp(level);
+	},
 	doWork: function(now){
 		if(SCG.gameLogics.isPaused){
 			this.lastTimeWork = now;
@@ -76,12 +84,12 @@ SCG.GO.EnemySoldier = function(prop)
 	}
 
 	if(prop.size == undefined){ prop.size = new Vector2(10,10); }
-	if(prop.maxHealth == undefined){ prop.maxHealth = 2 + (SCG.difficulty.level*0.75); }
+	if(prop.maxHealth == undefined){ prop.maxHealth = 2 + (SCG.difficulty.level*0.5); }
 	SCG.GO.GO.call(this,prop);
 
 	//overriding defaults and props
 	this.img = SCG.images.enemy_soldier;
-	this.speed = 0.25 + (SCG.difficulty.level*0.025);
+	this.speed = 0.20 + (SCG.difficulty.level*0.02);
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 15;
 	this.updatePlaceable = true;
@@ -89,8 +97,8 @@ SCG.GO.EnemySoldier = function(prop)
 	this.id = 'EnemySoldier' + (SCG.GO.EnemySoldier.counter++);
 	this.side = 2;
 	this.isDrawingHealthBar = true;
-	this.experienceCost = 5 + (SCG.difficulty.level*1.5);
-	this.moneyCost = 1 + (SCG.difficulty.level*0.5);
+	this.experienceCost = 7 + (SCG.difficulty.level*2.5);
+	this.moneyCost = 2 + (SCG.difficulty.level*0.5);
 
 	// SCG.Placeable.set(this);
 	 SCG.Placeable.enemyUnits[this.id] = this;
