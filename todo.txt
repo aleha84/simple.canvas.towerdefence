@@ -3,6 +3,7 @@
 -- optimizations
 -difficulty
 --level progress bar 
+--gunner lvl > 8 shoot micro grenade
 -spawner
 --difficulty
 --new enemy units

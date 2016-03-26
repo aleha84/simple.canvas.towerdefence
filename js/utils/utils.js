@@ -330,8 +330,13 @@ function doWorkByTimer(timer, now){
   }
 
   timer.delta = now - timer.lastTimeWork;
+  if(SCG.gameLogics.pauseDelta != 0){
+    console.log(SCG.gameLogics.pauseDelta);
+    timer.delta -= SCG.gameLogics.pauseDelta;
+  }
+
   timer.currentDelay -= timer.delta;
-  if(timer.currentDelay < 0){
+  if(timer.currentDelay <= 0){
     timer.currentDelay = timer.originDelay;
     timer.doWorkInternal.call(timer.context);  
   }

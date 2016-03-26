@@ -65,36 +65,9 @@ $(document).ready(function(){
 		SCG.gameControls.orientationChangeEventInit();
 		SCG.GO.DefenderState.init();
 
-		// var testGo = new SCG.GO.GO({
-		// 	img : SCG.images.test,
-		// 	position: new Vector2(200,200),
-		// 	id : 'test',
-		// 	size: new Vector2(20,20),
-		// 	speed: 0.5,
-		// 	path: [new Vector2(50,50), new Vector2(100,50), new Vector2(100,100), new Vector2(50,100)],
-		// 	internalUpdate: function(){ 
-		// 		if(this.destination == undefined)
-		// 		{
-		// 			// this.destination = new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height));
-		// 			// this.direction = this.position.direction(this.destination);	
-		// 			this.setDead();
-		// 		}
-		// 	 }
-		// });
-
-		//SCG.go.push(new SCG.GO.Enemy({position: new Vector2}));
-
 		for(var i=0;i<SCG.GO.DefenderState.positions.length;i++){
 			SCG.go.push(new SCG.GO.Defender({position: SCG.GO.DefenderState.positions[i]}));
 		}
-
-		// var testDefender = new SCG.GO.Defender({
-		// 	position: new Vector2(getRandom(12,SCG.battlefield.default.width-12),getRandom(12, SCG.battlefield.default.height)),
-		// 	size: new Vector2(30,30),
-		// });
-
-
-		// SCG.go.push(testDefender);
 
 		// for(var i = 0; i< 10; i++)
 		// {
@@ -116,6 +89,18 @@ SCG.animate = function() {
 
 SCG.draw = function(){
 	var now = new Date;
+
+	if(SCG.gameLogics.isPaused && SCG.gameLogics.pausedFrom == undefined){
+		SCG.gameLogics.pausedFrom = now;
+		SCG.gameLogics.pauseDelta = 0;
+	}
+	else if(SCG.gameLogics.pausedFrom != undefined && !SCG.gameLogics.isPaused){
+		SCG.gameLogics.pauseDelta = now - SCG.gameLogics.pausedFrom;
+		SCG.gameLogics.pausedFrom = undefined;
+	}
+	else if(SCG.gameLogics.pauseDelta != 0){
+		SCG.gameLogics.pauseDelta = 0;
+	}
 
 	SCG.gameControls.mousestate.doClickCheck();
 

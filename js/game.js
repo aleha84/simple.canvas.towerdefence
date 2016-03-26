@@ -21,7 +21,9 @@ SCG.gameLogics = {
 	fillBoundings: false,
 	wrongDeviceOrientation: false,
 	messageToShow: '',
-	isMobile: false
+	isMobile: false,
+	pausedFrom : undefined,
+	pauseDelta : 0,
 }
 
 SCG.difficulty = {
@@ -115,7 +117,7 @@ SCG.difficulty = {
 
 		SCG.context.font = this.infoPanel.fontSize * SCG.gameControls.scale.times + "px Arial";
 		SCG.context.fillStyle = 'gold';
-		SCG.context.fillText(SCG.difficulty.money, panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 23* SCG.gameControls.scale.times);
+		SCG.context.fillText(SCG.difficulty.money.toFixed(1), panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 23* SCG.gameControls.scale.times);
 
 		SCG.context.fillStyle = 'gray';
 		SCG.context.fillText(SCG.difficulty.level+1, panelTopLeft.x + 38* SCG.gameControls.scale.times, panelTopLeft.y + 40* SCG.gameControls.scale.times);

@@ -32,6 +32,11 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.currentExperience = 0;
 	this.weaponImg = undefined;
 
+	this.scatterLevel = 0;
+	this.fireDelayLevel = 0;
+	this.rangeLevel = 0;
+	this.explosionRadiusLevel = 0;
+
 	this.fireTimer = {
 		lastTimeWork: new Date,
 		delta : 0,
@@ -44,7 +49,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.aimingTimer = {
 		lastTimeWork: new Date,
 		delta : 0,
-		currentDelay: 500,
+		currentDelay: 0,
 		originDelay: 500,
 		doWorkInternal : this.aiming,
 		context: this	
@@ -59,13 +64,13 @@ SCG.GO.DefenderSoldier = function(prop)
 			break;
 		case 'sniper':
 			this.originScatter = 3;
-			this.originFireDelay = 5000;
+			this.originFireDelay = 4000;
 			this.originRange = 125;
 			this.weaponImg = SCG.images.sniper;
 			break;
 		case 'rpg':
-			this.originScatter = 10;
-			this.originFireDelay = 8000;
+			this.originScatter = 15;
+			this.originFireDelay = 7000;
 			this.originRange = 110;
 			this.weaponImg = SCG.images.rpg;
 			break;
@@ -105,13 +110,16 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
 			switch(getRandomInt(1,3)){
 				case 1:
-					this.currentScatter = this.originScatter * (Math.pow(0.91, this.level));
+					this.scatterLevel++;
+					this.currentScatter = this.originScatter * (Math.pow(0.91, this.fireDelayLevel));
 					break;
 				case 2:
+					this.fireDelayLevel++;
 					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
 					break;
 				case 3:
-					this.range = this.originRange  + (7.5 * this.level);
+					this.rangeLevel++;
+					this.range = this.originRange  + (7.5 * this.rangeLevel);
 					break;
 				default:
 					break;
@@ -120,10 +128,12 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 		case 'sniper':
 			switch (getRandomInt(1,3)){
 				case 1:
-					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
+					this.fireDelayLevel++;
+					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.fireDelayLevel));
 					break;
 				case 2:
-					this.range = this.originRange  + (50 * this.level);
+					this.rangeLevel++;
+					this.range = this.originRange  + (25 * this.rangeLevel);
 					break;
 				case 3: 
 					this.penetration++;
@@ -131,18 +141,18 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 			}
 			break;
 		case 'rpg':
-			switch (getRandomInt(1,4)){
+			switch (getRandomInt(1,3)){
 				case 1:
-					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.level));
+					this.fireDelayLevel++;
+					this.fireTimer.originDelay = this.originFireDelay * (Math.pow(0.9, this.fireDelayLevel));
 					break;
 				case 2:
-					this.range = this.originRange  + (10 * this.level);
+					this.rangeLevel++;
+					this.range = this.originRange  + (10 * this.rangeLevel);
 					break;
 				case 3:
-					this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
-					break;
-				case 4:
-					this.explosionRadiusModifier = this.originExplosionRadiusModifier  + (0.2 * this.level);
+					this.explosionRadiusLevel++;
+					this.explosionRadiusModifier = this.originExplosionRadiusModifier  + (0.2 * this.explosionRadiusLevel);
 					break;
 			}
 		default:
@@ -153,18 +163,22 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 SCG.GO.DefenderSoldier.prototype.aiming = function(){
 	var units = this.side == 1 ? SCG.Placeable.enemyUnits : SCG.Placeable.playerUnits;
 	var unitsInRange = [];
+	var specificTargets = [];
 	for(var unitId in units) {
 		if(units.hasOwnProperty(unitId)){
 			var unit = units[unitId];
 			var distance = this.position.distance(unit.position);
-			if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
-				unitsInRange.push({distance: distance, unit: unit});
-				break;
-			}
 			if(distance <= this.range){
-				unitsInRange.push({distance: distance, unit: unit});
+				if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
+					specificTargets.push({distance: distance, unit: unit});
+				}
+				unitsInRange.push({distance: distance, unit: unit});	
 			}
 		}
+	}
+
+	if(specificTargets.length > 0){
+		unitsInRange = specificTargets;
 	}
 
 	if(unitsInRange.length > 0){
@@ -234,16 +248,15 @@ SCG.GO.DefenderSoldier.prototype.internalRender = function(){
 }
 
 SCG.GO.DefenderSoldier.prototype.internalUpdate = function(now){
-	if(this.target != undefined){
-		if(!this.target.alive || this.position.distance(this.target.position) > this.range){
-			this.target = undefined;
-		}
-		else{
-			doWorkByTimer(this.fireTimer, now);
-		}
+	if(this.target != undefined && (!this.target.alive || this.position.distance(this.target.position) > this.range)){
+		this.target = undefined;
 	}
 
 	if(this.target == undefined){
 		doWorkByTimer(this.aimingTimer, now);
 	}
+	else{
+		doWorkByTimer(this.fireTimer, now); 	
+	}
+	
 }
