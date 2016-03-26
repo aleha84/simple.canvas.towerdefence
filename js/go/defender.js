@@ -34,6 +34,8 @@ SCG.GO.DefenderState = {
 	woodenFence: {
 		name: 'woodenFence',
 		img: undefined,
+		upgradeTo : 'stoneBarrier',
+		upgradeCost : 500,
 		maxDefendersCount : 2,
 		// getMenuItems: function(){
 		// 	return [
@@ -48,10 +50,16 @@ SCG.GO.DefenderState = {
 		// 	];
 		// }
 	},
+	stoneBarrier: {
+		name: 'stoneBarrier',
+		img: undefined,
+		maxDefendersCount : 3,
+	},
 	positions: [new Vector2(300,90), new Vector2(300,200), new Vector2(220,150), new Vector2(80,150), new Vector2(190,25), new Vector2(200,260), new Vector2(30,80), new Vector2(30,220)],
 	init: function(){
 		this.empty.img = SCG.images.placeholder;
 		this.woodenFence.img = SCG.images.wooden_fence;
+		this.stoneBarrier.img = SCG.images.stone_barrier;
 	}
 }
 

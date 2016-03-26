@@ -70,13 +70,23 @@ SCG.GO.GO.prototype = {
 			SCG.Placeable.remove(this);
 		}
 
+		var addKill = false;
+
 		if(this instanceof SCG.GO.EnemySoldier){
 			SCG.EnemySpawner.enemySoldiers.currentCount--;	
-			delete SCG.Placeable.enemyUnits[this.id];
-			SCG.difficulty.addKill();
+			addKill = true;
+		}
+		else if (this instanceof SCG.GO.EnemyLarge){
+			SCG.EnemySpawner.enemyLarge.currentCount--;	
+			addKill = true;
 		}
 		else if (this instanceof SCG.GO.Shot){
 			SCG.Animations.createObject(this.explosionType, this.hitPoint != undefined ? this.hitPoint : this.position);
+		}
+
+		if(addKill){
+			delete SCG.Placeable.enemyUnits[this.id];
+			SCG.difficulty.addKill();	
 		}
 	},
 

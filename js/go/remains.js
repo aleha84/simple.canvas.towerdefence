@@ -70,6 +70,15 @@ SCG.GO.Remains.types = {
 			this.position.y-=0.1;
 		}
 	},
+	soldierLarge: {
+		imgType: 1,
+		size: new Vector2(20,20),
+		timeToLive: 2000,
+		timeToLiveOrigin: 2000,
+		customUpdate: function() {
+			this.position.y-=0.1;
+		}
+	},
 	levelUp: {
 		imgType: 2,
 		size: new Vector2(15,15),
