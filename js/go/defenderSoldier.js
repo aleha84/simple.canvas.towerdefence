@@ -36,6 +36,7 @@ SCG.GO.DefenderSoldier = function(prop)
 	this.fireDelayLevel = 0;
 	this.rangeLevel = 0;
 	this.explosionRadiusLevel = 0;
+	
 
 	this.fireTimer = {
 		lastTimeWork: new Date,
@@ -56,6 +57,26 @@ SCG.GO.DefenderSoldier = function(prop)
 	}
 
 	switch(this.type){
+		case 'machine-gunner':
+			this.originScatter = 25;
+			this.originFireDelay = 50;
+			this.originRange = 90;
+			this.weaponImg = SCG.images.machine_gun;
+			this.burstSize = 15;
+			this.originBurstSize = 15;
+			this.maxBurstSize = 15;
+			this.reloading = false;
+			this.reloadingLevel = 0;
+			this.burstLevel = 0;
+			this.reloadingTimer = {
+				lastTimeWork: new Date,
+				delta : 0,
+				currentDelay: 5000,
+				originDelay: 5000,
+				doWorkInternal : this.reload,
+				context: this
+			}
+			break
 		case 'gunner':
 			this.originScatter = 7;
 			this.originFireDelay = 700;
@@ -94,6 +115,11 @@ SCG.GO.DefenderSoldier.prototype.getExperience = function(experience){
 	}
 }
 
+SCG.GO.DefenderSoldier.prototype.reload = function(){
+	this.reloading = false;
+	this.burstSize = this.maxBurstSize;
+}
+
 SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 	SCG.GO.Remains.types.getObject('levelUp', this.position.add(new Vector2(0, -this.size.y/2), true), false);
 
@@ -106,6 +132,24 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 	this.health = this.maxHealth;
 
 	switch(this.type){
+		case 'machine-gunner':
+			switch(getRandomInt(1,3)){
+				case 1:
+					this.reloadingLevel++;
+					this.reloadingTimer.originDelay = this.reloadingTimer.originDelay * 0.93;
+					break;
+				case 2:
+					this.burstLevel++;
+					this.maxBurstSize = this.originBurstSize + (this.burstLevel * 5);
+					break;
+				case 3:
+					this.rangeLevel++;
+					this.range = this.originRange  + (10 * this.rangeLevel);
+					break;
+				default:
+					break;
+			}
+			break;
 		case 'gunner':
 			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
 			if(this.level == 7){
@@ -175,6 +219,10 @@ SCG.GO.DefenderSoldier.prototype.aiming = function(){
 				if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
 					specificTargets.push({distance: distance, unit: unit});
 				}
+				if(this.type=='machine-gunner'){
+					this.fireDirection = this.position.direction(unit.position);
+					return;
+				}
 				unitsInRange.push({distance: distance, unit: unit});	
 			}
 		}
@@ -224,13 +272,26 @@ SCG.GO.DefenderSoldier.prototype.aiming = function(){
 }
 
 SCG.GO.DefenderSoldier.prototype.fire = function(){
-	if(this.target == undefined){
+	if((this.type != 'machine-gunner' && this.target == undefined) || (this.type == 'machine-gunner' && (this.fireDirection == undefined || this.burstSize == 0))){
 		return;
 	}
 
-	var targetNextPosition = this.target.position
-		.add(this.target.direction.mul(this.target.speed* ((this.position.distance(this.target.position)) / SCG.GO.Shot.ShotTypes[this.type].speed) ),true)
-		.add(new Vector2(getRandom(-this.originScatter, this.originScatter), getRandom(-this.originScatter, this.originScatter)),true);
+	var targetNextPosition = undefined;
+	if(this.type == 'machine-gunner'){
+
+		targetNextPosition = this.position.add(this.fireDirection.mul(this.range), true);
+		
+		this.burstSize--;
+		if(this.burstSize == 0){
+			this.reloading = true;
+		}
+	}
+	else{
+		targetNextPosition = this.target.position
+			.add(this.target.direction.mul(this.target.speed* ((this.position.distance(this.target.position)) / SCG.GO.Shot.ShotTypes[this.type].speed) ),true);
+	}
+	
+	targetNextPosition = targetNextPosition.add(new Vector2(getRandom(-this.originScatter, this.originScatter), getRandom(-this.originScatter, this.originScatter)),true);
 
 	if(this.type == 'sniper'){
 		targetNextPosition = this.position.add(this.position.direction(targetNextPosition).mul(this.range), true);
@@ -265,11 +326,25 @@ SCG.GO.DefenderSoldier.prototype.internalUpdate = function(now){
 		this.target = undefined;
 	}
 
-	if(this.target == undefined){
-		doWorkByTimer(this.aimingTimer, now);
+	if(this.type=='machine-gunner'){
+		if(this.fireDirection == undefined){
+			doWorkByTimer(this.aimingTimer, now);
+		}
+
+		if(this.reloading){
+			doWorkByTimer(this.aimingTimer, now);
+			doWorkByTimer(this.reloadingTimer, now);
+		}
+		else{
+			doWorkByTimer(this.fireTimer, now);
+		}
 	}
-	else{
-		doWorkByTimer(this.fireTimer, now); 	
+	else {
+		if(this.target == undefined){
+			doWorkByTimer(this.aimingTimer, now);
+		}
+		else{
+			doWorkByTimer(this.fireTimer, now); 	
+		}	
 	}
-	
 }

@@ -36,6 +36,11 @@ SCG.GO.Shot.ShotTypes = {
 		speed: 5,
 		explosionType: 'tinyExplosion'
 	},
+	'machine-gunner' : {
+		damage: 2,
+		speed: 7,
+		explosionType: 'tinyExplosion'	
+	},
 	sniper: {
 		damage: 50,
 		speed: 15,

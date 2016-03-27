@@ -35,7 +35,7 @@ SCG.GO.EnemyPaths = {
 SCG.EnemySpawner = {
 	enemySoldiers: {
 		currentSpawnDelay : 0,
-		originSpawnDelay : 1250,
+		originSpawnDelay : 1100,
 		currentCount: 0,
 		maxCount : 15,
 		countStep: 15,
@@ -106,7 +106,7 @@ SCG.GO.EnemySoldier = function(prop)
 
 	//overriding defaults and props
 	this.img = SCG.images.enemy_soldier;
-	this.speed = 0.20 + (SCG.difficulty.level*0.02);
+	this.speed = 0.30 + (SCG.difficulty.level*0.03);
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 15;
 	this.updatePlaceable = true;
