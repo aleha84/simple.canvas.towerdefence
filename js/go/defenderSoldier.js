@@ -108,6 +108,9 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 	switch(this.type){
 		case 'gunner':
 			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
+			if(this.level == 7){
+				this.useGrenadeLauncher = true;
+			}
 			switch(getRandomInt(1,3)){
 				case 1:
 					this.scatterLevel++;
@@ -231,6 +234,16 @@ SCG.GO.DefenderSoldier.prototype.fire = function(){
 
 	if(this.type == 'sniper'){
 		targetNextPosition = this.position.add(this.position.direction(targetNextPosition).mul(this.range), true);
+	}
+
+	if(this.type == 'gunner' && this.useGrenadeLauncher){
+		if(this.shotCounter == undefined){this.shotCounter = 0;}
+		if(this.shotCounter == 4){
+			SCG.GO.Shot.ShotTypes.getGrenade(this, targetNextPosition.clone());	
+			this.shotCounter = 0;
+		}
+
+		this.shotCounter++;
 	}
 	
 	SCG.GO.Shot.ShotTypes.getShot(this, targetNextPosition.clone());

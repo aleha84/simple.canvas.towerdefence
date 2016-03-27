@@ -41,12 +41,30 @@ SCG.GO.Shot.ShotTypes = {
 		speed: 15,
 		explosionType: 'tinyExplosion'
 	},
+	grenade: {
+		damage: 30,
+		speed: 10,
+		explosionRadius: 10,
+		explosionType: 'smallExplosion',
+		isExplosive : true
+	},
 	rpg:{
 		damage: 100,
 		speed: 10,
 		explosionRadius: 20,
 		explosionType: 'mediumExplosion',	
 		isExplosive : true
+	},
+	getGrenade: function(owner, destination){
+		SCG.go.push(new SCG.GO.Shot($.extend({},{
+			owner: owner,
+			side: owner.side,
+			position: owner.position.clone(),
+			destination: destination,
+			damageModifier: 1,
+			penetration: 1, 
+			explosionRadiusModifier: 1
+		}, SCG.GO.Shot.ShotTypes['grenade'])));
 	},
 	getShot: function(owner, destination){
 		SCG.go.push(new SCG.GO.Shot($.extend({},{
