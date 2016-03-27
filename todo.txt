@@ -2,8 +2,7 @@
 - gameplay
 -- optimizations
 -difficulty
---level progress bar 
---gunner lvl > 8 shoot micro grenade
+--machine-gunner aiming
 -spawner
 --difficulty
 --new enemy units
@@ -11,3 +10,6 @@
 -game over conditions
 -pause button
 -help info
+-Mass damage features
+--airstrike
+--bomb

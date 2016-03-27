@@ -178,7 +178,7 @@ SCG.GO.Defender.prototype.createMenuItems = function() {
 	}
 
 	if(this.defenderSoldiers.length < this.state.maxDefendersCount){
-		var types = ['gunner', 'sniper', 'rpg'];
+		var types = ['gunner', 'sniper', 'rpg', 'machine-gunner'];
 		for(var j = 0; j< types.length;j++){
 			(function(_j) {
 				var cost = SCG.difficulty.costs[types[_j]].getCost();

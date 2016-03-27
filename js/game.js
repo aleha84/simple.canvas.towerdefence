@@ -70,6 +70,15 @@ SCG.difficulty = {
 				return (this.base/2) + level * 50;
 			}
 		},
+		'machine-gunner':{
+			base: 300,
+			getCost: function() {
+				return this.base + SCG.difficulty.costs.getAmountOf('machine-gunner')*150;
+			},
+			getRefund: function(level) {
+				return (this.base/2) + level * 100;
+			}	
+		},
 		getAmountOf: function(type){
 			var result = 0;
 			for(var unitId in SCG.Placeable.playerUnits) {
