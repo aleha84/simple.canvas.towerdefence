@@ -68,6 +68,7 @@ SCG.GO.DefenderSoldier = function(prop)
 			this.reloading = false;
 			this.reloadingLevel = 0;
 			this.burstLevel = 0;
+			this.aimingTimer.originDelay = 250;
 			this.reloadingTimer = {
 				lastTimeWork: new Date,
 				delta : 0,
@@ -133,6 +134,7 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 
 	switch(this.type){
 		case 'machine-gunner':
+			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
 			switch(getRandomInt(1,3)){
 				case 1:
 					this.reloadingLevel++;
@@ -211,21 +213,56 @@ SCG.GO.DefenderSoldier.prototype.aiming = function(){
 	var units = this.side == 1 ? SCG.Placeable.enemyUnits : SCG.Placeable.playerUnits;
 	var unitsInRange = [];
 	var specificTargets = [];
+	var directions = [];
+	var vUp = Vector2.up();
 	for(var unitId in units) {
 		if(units.hasOwnProperty(unitId)){
 			var unit = units[unitId];
 			var distance = this.position.distance(unit.position);
 			if(distance <= this.range){
-				if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
-					specificTargets.push({distance: distance, unit: unit});
-				}
 				if(this.type=='machine-gunner'){
-					this.fireDirection = this.position.direction(unit.position);
-					return;
+					var d = this.position.direction(unit.position);
+					//var angle = vUp.angleTo(this.position.direction(unit.position));
+					//this.fireDirection = this.position.direction(unit.position);
+					//return;
+					directions.push({direction: d, angle: vUp.angleTo(d)});
 				}
-				unitsInRange.push({distance: distance, unit: unit});	
+				else{
+					if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
+						specificTargets.push({distance: distance, unit: unit});
+					}
+					unitsInRange.push({distance: distance, unit: unit});		
+				}
 			}
 		}
+	}
+
+	if(this.type=='machine-gunner'){
+		this.fireDirection = undefined;
+		if(directions.length > 0){
+			if(directions.length == 1){
+				this.fireDirection = directions[0].direction.clone();
+			}
+			else{
+				var sides = {left : { top: [], bottom: []}, right : { top: [], bottom: []}};
+				var side = undefined;
+				for(var i = 0; i<directions.length;i++){
+					side = sides[directions[i].angle < 0 ? 'left' : 'right'];
+					var angle = Math.abs(directions[i].angle);
+					side[angle < 90 ? 'top' : 'bottom'].push(directions[i].direction);
+				}
+
+				side = sides[(sides.left.top.length + sides.left.bottom.length) >= (sides.right.top.length + sides.right.bottom.length) ? 'left' : 'right'];
+				quater = side[side.top.length >= side.bottom.length ? 'top' : 'bottom'];
+				if(quater.length == 1){
+					this.fireDirection = quater[0].clone();
+				}
+				else{
+					this.fireDirection = Vector2.average(quater);
+				}
+			}
+		}
+		return;
 	}
 
 	if(specificTargets.length > 0){
@@ -327,12 +364,9 @@ SCG.GO.DefenderSoldier.prototype.internalUpdate = function(now){
 	}
 
 	if(this.type=='machine-gunner'){
-		if(this.fireDirection == undefined){
-			doWorkByTimer(this.aimingTimer, now);
-		}
+		doWorkByTimer(this.aimingTimer, now);
 
 		if(this.reloading){
-			doWorkByTimer(this.aimingTimer, now);
 			doWorkByTimer(this.reloadingTimer, now);
 		}
 		else{

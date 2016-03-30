@@ -93,6 +93,14 @@ Vector2.prototype = {
 		return this.mulVector(to);
 	},
 
+	cross: function(to){
+		if(!to || !(to instanceof Vector2)){
+			return 0;
+		}
+
+		return this.x*to.y - this.y*to.x;
+	},
+
 	mulVector : function(to){
 		if(!to || !(to instanceof Vector2)){
 			return 0;
@@ -138,7 +146,39 @@ Vector2.prototype = {
 
 	toString : function(){
 		return 'x: ' + this.x + ', y: ' + this.y;
+	},
+
+	angleTo : function(to, inRad){
+		if(!to || !(to instanceof Vector2)){
+			throw 'Param is not a vetor2 instance';
+		}
+
+		if(inRad == undefined){
+			inRad = false;
+		}
+
+		var result = Math.atan2(this.cross(to), this.dot(to));
+
+		if(inRad){
+			return result;
+		}
+
+		return result * 180/Math.PI;
 	}
+}
+
+Vector2.average = function(vectors){
+	if(!isArray(vectors) || isEmpty(vectors)){
+		throw 'Param is not defined';
+	}
+
+	var result = new Vector2;
+
+	for(var i = 0; i < vectors.length; i++){
+		result.add(vectors[i]);
+	}
+
+	return result.division(vectors.length);
 }
 
 Vector2.left = function(){
