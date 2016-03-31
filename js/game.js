@@ -24,6 +24,33 @@ SCG.gameLogics = {
 	isMobile: false,
 	pausedFrom : undefined,
 	pauseDelta : 0,
+	doPauseWork: function(now){
+		if(this.isPaused && this.pausedFrom == undefined){
+			this.pausedFrom = now;
+			this.pauseDelta = 0;
+		}
+		else if(this.pausedFrom != undefined && !this.isPaused){
+			this.pauseDelta = now - this.pausedFrom;
+			this.pausedFrom = undefined;
+		}
+		else if(this.pauseDelta != 0){
+			this.pauseDelta = 0;
+		}
+	}
+}
+
+SCG.buttons = {
+	buttons: [],
+	init: function() {
+		this.buttons.push(new SCG.GO.Button({position: new Vector2(250, SCG.battlefield.default.height - 20)}));
+	},
+	update: function(now){
+		var i = this.buttons.length;
+		while (i--) {
+			this.buttons[i].update(now);
+			this.buttons[i].render();
+		}
+	}
 }
 
 SCG.difficulty = {
@@ -146,8 +173,6 @@ SCG.difficulty = {
 }
 
 SCG.go = [];
-SCG.nonplayableGo = [];
-SCG.visibleGo = [];
 
 SCG.debugger = 
 {
@@ -170,7 +195,24 @@ SCG.debugger =
 SCG.defenderMenu = {
 	menu : undefined,
 	shouldRenderMenu: false,
-	clicked: false
+	clicked: false,
+	doUpdateWork: function(now) {
+		if(this.shouldRenderMenu && this.menu!= undefined){
+			if(!this.clicked && SCG.gameControls.mousestate.click.isClick){
+				this.shouldRenderMenu = false;
+			}
+			
+			if(this.clicked){
+				this.clicked = false;
+			}
+
+			this.menu.update(now);
+			this.menu.render();
+		}
+		else if(!this.shouldRenderMenu && this.menu!= undefined){
+			this.menu = undefined;
+		}
+	}
 }
 
 SCG.gameControls = {
@@ -378,16 +420,6 @@ SCG.gameControls = {
 			top : mTop,
 			left: mLeft
 		};
-
-		// var i = SCG.go.length;
-		// while (i--) {
-		// 	SCG.go[i].position = new Vector2(SCG.go[i].position.x * sizeChanges.x, SCG.go[i].position.y * sizeChanges.y);
-		// }
-
-		// var ni = SCG.nonplayableGo.length;
-		// while (ni--) {
-		// 	SCG.nonplayableGo[ni].update(now);
-		// }
 	},
 	permanentEventInit : function (){
 		var that = this;

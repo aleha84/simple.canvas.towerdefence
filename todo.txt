@@ -1,12 +1,9 @@
 
 - gameplay
 -- optimizations
--difficulty
---machine-gunner aiming
 -spawner
---difficulty
 --new enemy units
---aggresive enemies
+-?aggresive enemies
 -game over conditions
 -pause button
 -help info
