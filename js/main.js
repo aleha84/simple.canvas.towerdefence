@@ -7,6 +7,7 @@ SCG.src = {
 	upgrade: 'content/images/upgrade.png',
 	wooden_fence: 'content/images/wooden_fence.png',
 	stone_barrier: 'content/images/stone_barrier.png',
+	debrish_defence: 'content/images/debrish_defence.png',
 	placeholder: 'content/images/placeholder.png',
 	defender_soldier: 'content/images/defender_soldier.png',
 	enemy_soldier: 'content/images/enemy_soldier.png',
@@ -31,7 +32,9 @@ SCG.src = {
 	level: 'content/images/level.png',
 	progressBarHolder: 'content/images/progressBarHolder.png',
 	progressBarInner: 'content/images/progressBarInner.png',
-	info_panel: 'content/images/infoPanel.png'
+	info_panel: 'content/images/infoPanel.png',
+	button_inactive: 'content/images/button_inactive.png',
+	button_active: 'content/images/button_active.png',
 }
 
 SCG.images = {
@@ -61,7 +64,6 @@ $(document).ready(function(){
 		SCG.debugger.setValue('App started');
 	}
 
-	SCG.nonplayableGo = [];
 	SCG.gameControls.selectedGOs = [];
 
 	initializer(function(){
@@ -71,6 +73,8 @@ $(document).ready(function(){
 		for(var i=0;i<SCG.GO.DefenderState.positions.length;i++){
 			SCG.go.push(new SCG.GO.Defender({position: SCG.GO.DefenderState.positions[i]}));
 		}
+
+		SCG.buttons.init();
 
 		// for(var i = 0; i< 10; i++)
 		// {
@@ -93,17 +97,7 @@ SCG.animate = function() {
 SCG.draw = function(){
 	var now = new Date;
 
-	if(SCG.gameLogics.isPaused && SCG.gameLogics.pausedFrom == undefined){
-		SCG.gameLogics.pausedFrom = now;
-		SCG.gameLogics.pauseDelta = 0;
-	}
-	else if(SCG.gameLogics.pausedFrom != undefined && !SCG.gameLogics.isPaused){
-		SCG.gameLogics.pauseDelta = now - SCG.gameLogics.pausedFrom;
-		SCG.gameLogics.pausedFrom = undefined;
-	}
-	else if(SCG.gameLogics.pauseDelta != 0){
-		SCG.gameLogics.pauseDelta = 0;
-	}
+	SCG.gameLogics.doPauseWork(now);
 
 	SCG.gameControls.mousestate.doClickCheck();
 
@@ -111,10 +105,6 @@ SCG.draw = function(){
 
 	//draw background
 	SCG.context.drawImage(SCG.images.background,0,0,SCG.battlefield.width,SCG.battlefield.height);
-	if((!SCG.gameLogics.isPaused || (SCG.gameLogics.isPaused && SCG.gameLogics.isPausedStep)) && !SCG.gameLogics.gameOver){
-		// clear visible go array
-		SCG.visibleGo = [];	
-	}
 
 	var i = SCG.go.length;
 	while (i--) {
@@ -125,30 +115,9 @@ SCG.draw = function(){
 		}
 	}
 
-	var ni = SCG.nonplayableGo.length;
-	while (ni--) {
-		SCG.nonplayableGo[ni].update(now);
-		SCG.nonplayableGo[ni].render();
-		if(!SCG.nonplayableGo[ni].alive){
-			var deleted = SCG.nonplayableGo.splice(ni,1);
-		}
-	}
+	SCG.buttons.update(now);
 
-	if(SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu!= undefined){
-		if(!SCG.defenderMenu.clicked && SCG.gameControls.mousestate.click.isClick){
-			SCG.defenderMenu.shouldRenderMenu = false;
-		}
-		
-		if(SCG.defenderMenu.clicked){
-			SCG.defenderMenu.clicked = false;
-		}
-
-		SCG.defenderMenu.menu.update(now);
-		SCG.defenderMenu.menu.render();
-	}
-	else if(!SCG.defenderMenu.shouldRenderMenu && SCG.defenderMenu.menu!= undefined){
-		SCG.defenderMenu.menu = undefined;
-	}
+	SCG.defenderMenu.doUpdateWork(now);
 
 	SCG.difficulty.render();
 

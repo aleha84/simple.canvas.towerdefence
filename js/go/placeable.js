@@ -1,8 +1,12 @@
+// used for shot interaction
+
 SCG.Placeable = {
 	battlefield : {},
 	playerUnits: {},
 	enemyUnits: {},
 	show: false,
+
+	// see and remove commented out because of hi load on mobile devices
 	set: function(go){
 		// var topLeft = new Vector2(Math.round(go.position.x - go.size.x/2), Math.round(go.position.y - go.size.y/2));
 		// for(var x = 0; x<go.size.x;x++){

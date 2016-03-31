@@ -5,18 +5,6 @@ SCG.GO.DefenderState = {
 		upgradeCost : 300,
 		img: undefined,
 		maxDefendersCount: 1,
-		// getMenuItems: function(){
-		// 	return [
-		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.upgrade, 
-		// 			clickCallback: function(context) { 
-		// 				if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-		// 				{
-		// 					context.parent.parent.upgrade();
-		// 				}
-		// 			}}),
-		// 		//new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-		// 	];
-		// }
 		// lightProp : {
 		// 	position: new Vector2,
 		// 	size: new Vector2(30,30),
@@ -37,29 +25,25 @@ SCG.GO.DefenderState = {
 		upgradeTo : 'stoneBarrier',
 		upgradeCost : 500,
 		maxDefendersCount : 2,
-		// getMenuItems: function(){
-		// 	return [
-		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.add_soldier, 
-		// 			clickCallback: function(context) { 
-		// 				if(context && context.parent && context.parent.parent && context.parent.parent instanceof SCG.GO.Defender)
-		// 				{
-		// 					context.parent.parent.addDefender();
-		// 				}
-		// 			}}),
-		// 		new SCG.GO.MenuItem({size: new Vector2(40,40), position: new Vector2, img: SCG.images.cross, clickCallback: function() { console.log('cancel clicked'); }})
-		// 	];
-		// }
 	},
 	stoneBarrier: {
 		name: 'stoneBarrier',
 		img: undefined,
 		maxDefendersCount : 3,
+		upgradeCost : 800,
+		upgradeTo : 'debrishDefence',
+	},
+	debrishDefence : {
+		name: 'debrishDefence',
+		img: undefined,
+		maxDefendersCount : 4,
 	},
 	positions: [new Vector2(300,90), new Vector2(300,200), new Vector2(220,150), new Vector2(80,150), new Vector2(190,25), new Vector2(200,260), new Vector2(30,80), new Vector2(30,220)],
 	init: function(){
 		this.empty.img = SCG.images.placeholder;
 		this.woodenFence.img = SCG.images.wooden_fence;
 		this.stoneBarrier.img = SCG.images.stone_barrier;
+		this.debrishDefence.img = SCG.images.debrish_defence;
 	}
 }
 
