@@ -35,6 +35,8 @@ SCG.src = {
 	info_panel: 'content/images/infoPanel.png',
 	button_inactive: 'content/images/button_inactive.png',
 	button_active: 'content/images/button_active.png',
+	button_selected: 'content/images/button_selected.png',
+	button_selected_blink: 'content/images/button_selected_blink.png',
 }
 
 SCG.images = {

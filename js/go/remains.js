@@ -13,7 +13,7 @@ SCG.GO.Remains = function(prop)
 		lastTimeWork: new Date,
 		delta: 0
 	}
-	this.aplha = 1;
+	this.alpha = 1;
 }
 
 SCG.GO.Remains.counter = 0;
