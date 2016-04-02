@@ -22,6 +22,7 @@ SCG.src = {
 	remove_rpg: 'content/images/remove_rpg.png',
 	'remove_machine-gunner': 'content/images/remove_machine_gunner.png',
 	explosion_sheet: 'content/images/explosionSheet.png',
+	explosion_sheet1: 'content/images/explosionSheet1.png',
 	soldier_remains: 'content/images/soldierremains.png',
 	rifle: 'content/images/rifle.png',
 	sniper: 'content/images/sniper.png',
@@ -37,6 +38,8 @@ SCG.src = {
 	button_active: 'content/images/button_active.png',
 	button_selected: 'content/images/button_selected.png',
 	button_selected_blink: 'content/images/button_selected_blink.png',
+	bomb: 'content/images/bomb.png',
+	
 }
 
 SCG.images = {

@@ -42,7 +42,21 @@ SCG.gameLogics = {
 SCG.buttons = {
 	buttons: [],
 	init: function() {
-		this.buttons.push(new SCG.GO.Button({position: new Vector2(250, SCG.battlefield.default.height - 20)}));
+		this.buttons.push(new SCG.GO.Button({position: new Vector2(250, SCG.battlefield.default.height - 20), type: 'bomb', cost: 1500,
+			selectCallback: function(){ 
+				(function(button){
+					SCG.gameControls.mousestate.click.handlers['btn1Click'] = function(){
+						button.select();
+						if(SCG.difficulty.money >= button.cost){
+							SCG.difficulty.money -= button.cost;
+							SCG.GO.Shot.ShotTypes.getBomb(SCG.gameControls.mousestate.position.division(SCG.gameControls.scale.times));
+						}
+						delete SCG.gameControls.mousestate.click.handlers['btn1Click'];
+					}	
+				})(this)
+				
+			}
+		}));
 	},
 	update: function(now){
 		var i = this.buttons.length;
@@ -248,6 +262,13 @@ SCG.gameControls = {
 				this.click.prevStateDown = false;
 				this.click.isClick = true;
 
+				if(!isEmpty(this.click.handlers)){
+					for(var handlerId in this.click.handlers) {
+						if(this.click.handlers.hasOwnProperty(handlerId) && typeof this.click.handlers[handlerId] === 'function'){
+							this.click.handlers[handlerId]();
+						}
+					}
+				}
 				// SCG.defenderMenu.menu = undefined;
 				// SCG.defenderMenu.shouldRenderMenu = false;
 			}
@@ -258,7 +279,8 @@ SCG.gameControls = {
 		},
 		click: {
 			prevStateDown: false,
-			isClick : false
+			isClick : false,
+			handlers: {}
 		}
 	},
 	keyboardstate: {

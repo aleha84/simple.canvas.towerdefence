@@ -60,6 +60,13 @@ SCG.GO.Shot.ShotTypes = {
 		explosionType: 'mediumExplosion',	
 		isExplosive : true
 	},
+	bomb: {
+		damage: 300,
+		speed: 0.1,
+		explosionRadius: 75,
+		explosionType: 'bigExplosion',
+		isExplosive : true
+	},
 	getGrenade: function(owner, destination){
 		SCG.go.push(new SCG.GO.Shot($.extend({},{
 			owner: owner,
@@ -81,6 +88,16 @@ SCG.GO.Shot.ShotTypes = {
 			penetration: owner.penetration, 
 			explosionRadiusModifier: owner.explosionRadiusModifier
 		}, SCG.GO.Shot.ShotTypes[owner.type])));
+	},
+	getBomb: function(destination){
+		SCG.go.push(new SCG.GO.Shot($.extend({},{
+			side: 1,
+			position: destination.clone(),
+			destination: destination.add(new Vector2(0.1,0.1),true),
+			damageModifier: 1,
+			penetration: 1, 
+			explosionRadiusModifier: 1
+		}, SCG.GO.Shot.ShotTypes['bomb'])));
 	}
 }
 
@@ -139,7 +156,7 @@ SCG.GO.Shot.prototype.beforeDead = function(){
 }
 
 SCG.GO.Shot.prototype.internalPreUpdate = function(){
-	if(!this.alive){
+	if(!this.alive || this.type == 'bomb'){
 		return false;
 	}
 

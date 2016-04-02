@@ -237,6 +237,11 @@ function isString(variable)
   return typeof myVar == 'string' || myVar instanceof String;
 }
 
+function isArray(obj)
+{
+  return Object.prototype.toString.call(obj) === '[object Array]';
+}
+
 var pointerEventToXY = function(e){
   var out = {x:0, y:0};
   if(e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel'){
@@ -262,9 +267,24 @@ function absorbTouchEvent(event) {
   
 }
 
-function isArray(obj)
+function checkClamps(clamps, value)
 {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+  if(!isArray(clamps) || isEmpty(clamps)){
+    return 1;
+  }
+
+  if(value > clamps[1]){
+    value = clamps[1];
+  }
+  else if(value < clamps[0]){
+    value = clamps[0];
+  }
+
+  if(value == clamps[0] || value == clamps[1]){
+    return -1;
+  }
+
+  return 1;
 }
 
 function isBetween(x, begin, end)
@@ -331,7 +351,6 @@ function doWorkByTimer(timer, now){
 
   timer.delta = now - timer.lastTimeWork;
   if(SCG.gameLogics.pauseDelta != 0){
-    console.log(SCG.gameLogics.pauseDelta);
     timer.delta -= SCG.gameLogics.pauseDelta;
   }
 
