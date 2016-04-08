@@ -47,6 +47,22 @@ SCG.EnemySpawner = {
 			this.originSpawnDelay *= 0.9;
 		}
 	},
+	enemyVehicle: {
+		currentSpawnDelay: 0,
+		originSpawnDelay: 10000,
+		currentCount: 0,
+		maxCount : 0,
+		countStep: 1,
+		spawner: function(path){
+			SCG.go.push(new SCG.GO.EnemyVehicle({position: path.shift().clone(), path: path}));
+		},
+		levelUp: function(level){
+			if((level+1) % 5 == 0){
+				this.maxCount++;
+				this.originSpawnDelay *= 0.9;	
+			}
+		}
+	},
 	enemyLarge: {
 		currentSpawnDelay : 0,
 		originSpawnDelay : 6000,
@@ -68,6 +84,7 @@ SCG.EnemySpawner = {
 	levelUp: function(level){
 		this.enemySoldiers.levelUp(level);
 		this.enemyLarge.levelUp(level);
+		this.enemyVehicle.levelUp(level);
 	},
 	doWork: function(now){
 		if(SCG.gameLogics.isPaused){
@@ -79,6 +96,7 @@ SCG.EnemySpawner = {
 		this.delta = now - this.lastTimeWork;
 		this.doWorkInternal(this.enemySoldiers, this.delta);
 		this.doWorkInternal(this.enemyLarge, this.delta);
+		this.doWorkInternal(this.enemyVehicle, this.delta);
 		this.lastTimeWork = now;
 	},
 	doWorkInternal: function(entry, delta){
@@ -150,7 +168,7 @@ SCG.GO.EnemyLarge = function(prop)
 	this.id = 'EnemyLarge' + (SCG.GO.EnemyLarge.counter++);
 	this.side = 2;
 	this.isDrawingHealthBar = true;
-	this.experienceCost = 40 + (SCG.difficulty.level*4.5);
+	this.experienceCost = 30 + (SCG.difficulty.level*4);
 	this.moneyCost = 20 + (SCG.difficulty.level*5);
 
 	// SCG.Placeable.set(this);
@@ -163,4 +181,44 @@ SCG.GO.EnemyLarge.prototype.constructor = SCG.GO.EnemyLarge;
 
 SCG.GO.EnemyLarge.prototype.beforeDead = function(){
 	SCG.GO.Remains.types.getObject('soldierLarge', this.position.clone());
+}
+
+
+SCG.GO.EnemyVehicle = function(prop)
+{
+	if(prop.position === undefined)
+	{
+		throw 'SCG.GO.EnemyVehicle -> position is undefined';
+	}
+
+	if(prop.size == undefined){ prop.size = new Vector2(25,16.25); }
+	if(prop.maxHealth == undefined){ prop.maxHealth = 200 + (SCG.difficulty.level*5); }
+	SCG.GO.GO.call(this,prop);
+
+	//overriding defaults and props
+	this.img = SCG.images.enemy_vehicle;
+	this.speed = 0.1 + (SCG.difficulty.level*0.0075);
+	this.randomizeDestination = true;
+	this.randomizeDestinationRadius = 5;
+	this.updatePlaceable = true;
+	this.hasPlaceable = true;
+	this.id = 'EnemyVehicle' + (SCG.GO.EnemyVehicle.counter++);
+	this.side = 2;
+	this.isDrawingHealthBar = true;
+	this.experienceCost = 60 + (SCG.difficulty.level*6);
+	this.moneyCost = 40 + (SCG.difficulty.level*10);
+
+	// SCG.Placeable.set(this);
+	SCG.Placeable.enemyUnits[this.id] = this;
+	this.armoured = true;
+}
+
+SCG.GO.EnemyVehicle.counter = 0;
+SCG.GO.EnemyVehicle.prototype = Object.create( SCG.GO.GO.prototype );
+SCG.GO.EnemyVehicle.prototype.constructor = SCG.GO.EnemyVehicle;
+
+SCG.GO.EnemyVehicle.prototype.beforeDead = function(){
+	SCG.Animations.createObject('mediumExplosion', this.position.add(new Vector2(-5,5), true));
+	SCG.Animations.createObject('mediumExplosion', this.position.add(new Vector2(5,5), true));
+	SCG.Animations.createObject('mediumExplosion', this.position.add(new Vector2(0,-5), true));
 }

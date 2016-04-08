@@ -80,6 +80,11 @@ SCG.GO.GO.prototype = {
 			SCG.EnemySpawner.enemyLarge.currentCount--;	
 			addKill = true;
 		}
+		else if (this instanceof SCG.GO.EnemyVehicle)
+		{
+			SCG.EnemySpawner.enemyVehicle.currentCount--;	
+			addKill = true;	
+		}
 		else if (this instanceof SCG.GO.Shot){
 			SCG.Animations.createObject(this.explosionType, this.hitPoint != undefined ? this.hitPoint : this.position);
 		}

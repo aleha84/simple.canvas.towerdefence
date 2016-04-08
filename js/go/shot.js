@@ -137,6 +137,10 @@ SCG.GO.Shot.prototype.explosion = function(position){
 }
 
 SCG.GO.Shot.prototype.hit = function(unit, damage) {
+	if(unit.armoured && !this.isExplosive){
+		damage*=0.1;
+	}
+
 	unit.hitted(damage);
 	if(!unit.alive){
 		if(unit.experienceCost != undefined && this.owner != undefined && this.owner.alive && this.owner.getExperience != undefined){
