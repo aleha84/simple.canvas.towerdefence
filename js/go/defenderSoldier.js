@@ -231,6 +231,9 @@ SCG.GO.DefenderSoldier.prototype.aiming = function(){
 					if(this.type=='sniper' && unit instanceof SCG.GO.EnemyLarge){
 						specificTargets.push({distance: distance, unit: unit});
 					}
+					if(this.type=='rpg' && unit instanceof SCG.GO.EnemyVehicle){
+						specificTargets.push({distance: distance, unit: unit});
+					}
 					unitsInRange.push({distance: distance, unit: unit});		
 				}
 			}

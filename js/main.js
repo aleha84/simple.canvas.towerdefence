@@ -12,6 +12,7 @@ SCG.src = {
 	defender_soldier: 'content/images/defender_soldier.png',
 	enemy_soldier: 'content/images/enemy_soldier.png',
 	enemy_large: 'content/images/enemy_large.png',
+	enemy_vehicle: 'content/images/enemy_vehicle.png',
 	add_soldier: 'content/images/add_soldier.png',
 	add_gunner: 'content/images/add_gunner.png',
 	add_sniper: 'content/images/add_sniper.png',
