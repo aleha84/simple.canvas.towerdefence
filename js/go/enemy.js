@@ -51,7 +51,7 @@ SCG.EnemySpawner = {
 		currentSpawnDelay: 0,
 		originSpawnDelay: 10000,
 		currentCount: 0,
-		maxCount : 1,
+		maxCount : 0,
 		countStep: 1,
 		spawner: function(path){
 			SCG.go.push(new SCG.GO.EnemyVehicle({position: path.shift().clone(), path: path}));
