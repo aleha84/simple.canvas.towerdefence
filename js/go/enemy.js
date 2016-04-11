@@ -35,7 +35,7 @@ SCG.GO.EnemyPaths = {
 SCG.EnemySpawner = {
 	enemySoldiers: {
 		currentSpawnDelay : 0,
-		originSpawnDelay : 1100,
+		originSpawnDelay : 1300,
 		currentCount: 0,
 		maxCount : 15,
 		countStep: 15,
@@ -57,7 +57,7 @@ SCG.EnemySpawner = {
 			SCG.go.push(new SCG.GO.EnemyVehicle({position: path.shift().clone(), path: path}));
 		},
 		levelUp: function(level){
-			if((level+1) % 5 == 0){
+			if((level+1) % (this.maxCount == 0 ? 7 : 5) == 0){
 				this.maxCount++;
 				this.originSpawnDelay *= 0.9;	
 			}
@@ -196,7 +196,7 @@ SCG.GO.EnemyVehicle = function(prop)
 	SCG.GO.GO.call(this,prop);
 
 	//overriding defaults and props
-	this.img = SCG.images.enemy_vehicle;
+	this.img = SCG.images.enemy_vehicle_01;
 	this.speed = 0.1 + (SCG.difficulty.level*0.0075);
 	this.randomizeDestination = true;
 	this.randomizeDestinationRadius = 5;
@@ -211,6 +211,15 @@ SCG.GO.EnemyVehicle = function(prop)
 	// SCG.Placeable.set(this);
 	SCG.Placeable.enemyUnits[this.id] = this;
 	this.armoured = true;
+
+	this.imageSwapTimer = {
+		lastTimeWork: new Date,
+		delta : 0,
+		currentDelay: 0,
+		originDelay: 300,
+		doWorkInternal : this.imageSwap,
+		context: this	
+	};
 }
 
 SCG.GO.EnemyVehicle.counter = 0;
@@ -222,3 +231,18 @@ SCG.GO.EnemyVehicle.prototype.beforeDead = function(){
 	SCG.Animations.createObject('mediumExplosion', this.position.add(new Vector2(5,5), true));
 	SCG.Animations.createObject('mediumExplosion', this.position.add(new Vector2(0,-5), true));
 }
+
+SCG.GO.EnemyVehicle.prototype.imageSwap = function(){
+	if(this.img == SCG.images.enemy_vehicle_01){
+		this.img = SCG.images.enemy_vehicle_02;
+	}
+	else{
+		this.img = SCG.images.enemy_vehicle_01;	
+	}
+}
+
+SCG.GO.EnemyVehicle.prototype.internalPreUpdate = function(now)
+{
+	doWorkByTimer(this.imageSwapTimer, now);	
+}
+

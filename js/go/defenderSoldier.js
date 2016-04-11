@@ -62,9 +62,9 @@ SCG.GO.DefenderSoldier = function(prop)
 			this.originFireDelay = 50;
 			this.originRange = 90;
 			this.weaponImg = SCG.images.machine_gun;
-			this.burstSize = 15;
-			this.originBurstSize = 15;
-			this.maxBurstSize = 15;
+			this.burstSize = 12;
+			this.originBurstSize = 12;
+			this.maxBurstSize = 12;
 			this.reloading = false;
 			this.reloadingLevel = 0;
 			this.burstLevel = 0;
@@ -134,7 +134,7 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 
 	switch(this.type){
 		case 'machine-gunner':
-			this.damageModifier = this.originDamageModifier  + (0.25 * this.level);
+			this.damageModifier = this.originDamageModifier  + (0.1 * this.level);
 			switch(getRandomInt(1,3)){
 				case 1:
 					this.reloadingLevel++;
@@ -142,11 +142,11 @@ SCG.GO.DefenderSoldier.prototype.levelUp = function(){
 					break;
 				case 2:
 					this.burstLevel++;
-					this.maxBurstSize = this.originBurstSize + (this.burstLevel * 5);
+					this.maxBurstSize = this.originBurstSize + (this.burstLevel * 2);
 					break;
 				case 3:
 					this.rangeLevel++;
-					this.range = this.originRange  + (10 * this.rangeLevel);
+					this.range = this.originRange  + (8 * this.rangeLevel);
 					break;
 				default:
 					break;
